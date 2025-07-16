@@ -73,6 +73,3 @@ Haz commit de tus cambios (git commit -m 'Add some feature')
 Haz push a la rama (git push origin feature/awesome-feature)
 
 Abre un Pull Request
-
-📄 Licencia
-MIT © 2023 Eduardo Cayrols
