@@ -62,7 +62,7 @@ class _InputFieldHeightWidgetState extends State<InputFieldHeightWidget> {
       padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 8.0),
       child: Container(
         width: double.infinity,
-        height: 293.4,
+        height: 335.52,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           boxShadow: [
@@ -309,7 +309,7 @@ class _InputFieldHeightWidgetState extends State<InputFieldHeightWidget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 30.0,
+                              width: 40.0,
                               child: TextFormField(
                                 controller: _model.feetFieldTextController,
                                 focusNode: _model.feetFieldFocusNode,
@@ -323,6 +323,7 @@ class _InputFieldHeightWidgetState extends State<InputFieldHeightWidget> {
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   isDense: true,
+                                  hintText: '0',
                                   hintStyle: FlutterFlowTheme.of(context)
                                       .headlineSmall
                                       .override(

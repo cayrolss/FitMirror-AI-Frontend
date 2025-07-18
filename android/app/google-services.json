@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "789265813244",
+    "project_id": "fit-mirror-a-i-nwusib",
+    "storage_bucket": "fit-mirror-a-i-nwusib.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789265813244:android:90e9fc4427d13f0080d179",
+        "android_client_info": {
+          "package_name": "com.mycompany.fitmirrorai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789265813244-h41lfiq3tmvdl2jht4s86ap1lr20c7rs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.fitmirrorai",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "789265813244-jp6m8qjnmbij9s646gee8qiuesqa01cc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.fitmirrorai",
+            "certificate_hash": "3319d47f35d23c91803a8cf0cdaf9db312735146"
+          }
+        },
+        {
+          "client_id": "789265813244-17u5o3de2saedtpg6tf7gf10jkrl4p05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEM5mn2GtO3sv-MxAjYG58O949ShMgGPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789265813244-17u5o3de2saedtpg6tf7gf10jkrl4p05.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "789265813244-t7cdsogcb0atg71hbn0cde2hntlip25t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.fitmirrorai"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

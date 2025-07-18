@@ -341,10 +341,12 @@ class SendFitnessMessageCall {
     String? message = '',
     String? lang = '',
     bool? resetMemory,
+    String? coachType = '',
   }) async {
     final ffApiRequestBody = '''
 {
   "user_id": "${escapeStringForJson(userId)}",
+  "coach_type": "${escapeStringForJson(coachType)}",
   "message": "${escapeStringForJson(message)}",
   "lang": "${escapeStringForJson(lang)}",
   "reset_memory": ${resetMemory}
@@ -352,7 +354,7 @@ class SendFitnessMessageCall {
     return ApiManager.instance.makeApiCall(
       callName: 'SendFitnessMessage',
       apiUrl:
-          'https:///fitmirror-ai-789265813244.europe-west1.run.app/v1/fitness-coach-chat',
+          'https://fitmirror-ai-789265813244.europe-west1.run.app/v1/coach-chat',
       callType: ApiCallType.POST,
       headers: {},
       params: {},
