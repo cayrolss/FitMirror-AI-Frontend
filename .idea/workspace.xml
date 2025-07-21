@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c84a2cc1-ad4a-48a1-aa5e-73feabb74d52" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_options.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/google-services.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/proguard-rules.pro" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/debug/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/kotlin/com/example/my_project/MainActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/drawable/launch_background.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values-night-v31/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values-night/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values-v31/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/values/styles.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/profile/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/audios/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/fonts/Lexend Deca-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/fonts/Montserrat-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/fonts/Montserrat-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/fonts/MyFlutterApp.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/fonts/Poppins-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/fonts/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/jsons/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/pdfs/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/rive_animations/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/videos/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/.metadata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/analysis_options.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/audios/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/fonts/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/images/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/jsons/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/pdfs/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/rive_animations/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/assets/videos/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/app_state.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/backend/schema/util/firestore_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/backend/schema/util/schema_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/custom_code/widgets/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/custom_code/widgets/time_picker_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/flutter_flow/flutter_flow_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/flutter_flow/flutter_flow_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/flutter_flow/flutter_flow_widgets.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/flutter_flow/nav/nav.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/flutter_flow/nav/serialization_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/main.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/pages/home_page/home_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/lib/pages/home_page/home_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Flutter/Flutter-Debug.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Flutter/Flutter-Release.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Podfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner.xcodeproj/project_auth.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/AppDelegate.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Base.lproj/MainMenu.xib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Configs/AppInfo.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Configs/Debug.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Configs/Release.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Configs/Warnings.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/DebugProfile.entitlements" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/MainFlutterWindow.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/macos/Runner/Release.entitlements" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/pubspec.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/flutter/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/flutter/generated_plugin_registrant.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/flutter/generated_plugins.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/Runner.rc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/flutter_window.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/flutter_window.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/resource.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/resources/app_icon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/runner.exe.manifest" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/utils.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/utils.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/win32_window.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/cupertino_time_picker_hiuzb7/windows/runner/win32_window.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/.metadata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/analysis_options.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/audios/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/fonts/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/images/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/jsons/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/pdfs/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/rive_animations/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/assets/videos/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/backend/schema/util/firestore_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/backend/schema/util/schema_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/custom_code/widgets/custom_clender.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/custom_code/widgets/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/flutter_flow/flutter_flow_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/flutter_flow/flutter_flow_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/flutter_flow/flutter_flow_widgets.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/flutter_flow/nav/nav.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/flutter_flow/nav/serialization_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/main.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/pages/home_page/home_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/lib/pages/home_page/home_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/custom_calender_library_p0divp/pubspec.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/api_requests/api_manager.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/api_requests/api_paging_params.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/api_requests/get_streamed_response.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/flutter_flow/lat_lng.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/flutter_flow/place.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/flutter_flow/upload_data_class.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/lib/flutter_flow/uploaded_file.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_commons/pubspec.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_theme/lib/flutter_flow/flutter_flow_theme.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependencies/ff_theme/pubspec.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/firebase.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/firestore.indexes.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/firestore.rules" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/functions/api_manager.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/functions/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/functions/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/firebase/storage.rules" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Flutter/Debug.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Flutter/Release.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/ImageNotification/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/ImageNotification/NotificationService.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Podfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Base.lproj/LaunchScreen.storyboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Base.lproj/Main.storyboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/GoogleService-Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/PrivacyInfo.xcprivacy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Runner-Bridging-Header.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Runner.entitlements" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app_state.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/auth_manager.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/base_auth_user_provider.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/anonymous_auth.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/apple_auth.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/auth_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/email_auth.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/firebase_auth_manager.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/firebase_user_provider.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/github_auth.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/google_auth.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/auth/firebase_auth/jwt_token_auth.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/api_requests/api_calls.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/backend.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/firebase/firebase_config.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/analyses_record.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/fitness_messages_record.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/nutrition_messages_record.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/preferences_record.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/profile_record.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/structs/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/structs/profile_struct.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/structs/user_profile_response_struct.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/users_record.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/util/firestore_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/backend/schema/util/schema_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/dark_light_switch_large_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/dark_light_switch_large_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/metric_toggle_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/components/metric_toggle_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/increment_page_index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/print_false.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/recalculate_macros_from_meals.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/update_app_state_field.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/custom_functions.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/custom_icons.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_animations.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_button_tabbar.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_calendar.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_checkbox_group.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_drop_down.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_icon_button.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_toggle_icon.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/flutter_flow_widgets.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/form_field_controller.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/internationalization.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/keep_alive_wrapper.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/nav/nav.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_flow/nav/serialization_util.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/index.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/list/list_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/list/list_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_allergies/question_allergies_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_allergies/question_allergies_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_cardio/question_cardio_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_cardio/question_cardio_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_diet/question_diet_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_diet/question_diet_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_meals_day/question_meals_day_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_meals_day/question_meals_day_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_preference/question_preference_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_preference/question_preference_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_preferences/question_preferences_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_preferences/question_preferences_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_select_equipment/question_select_equipment_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_select_equipment/question_select_equipment_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_week/question_week_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_week/question_week_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_where/question_where_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_where/question_where_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_zone/question_zone_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/question_zone/question_zone_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/select_dumbells/select_dumbells_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/select_dumbells/select_dumbells_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/terms/terms_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/other/terms/terms_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/auth_0_start_page/auth0_start_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/auth_0_start_page/auth0_start_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/authentication/auth_1_sign_up/auth1_sign_up_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/authentication/auth_1_sign_up/auth1_sign_up_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_main_l_e_t_s_b_u_i_l_d/initialquest_p_main_l_e_t_s_b_u_i_l_d_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_main_l_e_t_s_b_u_i_l_d/initialquest_p_main_l_e_t_s_b_u_i_l_d_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_main_personal_tranisiton/initialquest_p_main_personal_tranisiton_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_main_personal_tranisiton/initialquest_p_main_personal_tranisiton_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_nutri_l_e_t_s_n_u_t_r_i/initialquest_p_nutri_l_e_t_s_n_u_t_r_i_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_nutri_l_e_t_s_n_u_t_r_i/initialquest_p_nutri_l_e_t_s_n_u_t_r_i_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_workout_l_e_t_s_w_o_r_k_o_u_t/initialquest_p_workout_l_e_t_s_w_o_r_k_o_u_t_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p1_ftue/initialquest_p_workout_l_e_t_s_w_o_r_k_o_u_t/initialquest_p_workout_l_e_t_s_w_o_r_k_o_u_t_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p2_nutrition/nutri_chat/nutri_chat_page/nutri_chat_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p2_nutrition/nutri_chat/nutri_chat_page/nutri_chat_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p2_nutrition/recipe/recipe_template/recipe_template_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p2_nutrition/recipe/recipe_template/recipe_template_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/coach_chat/coach_chat_page/coach_chat_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/coach_chat/coach_chat_page/coach_chat_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/details_exercise/details_exercise_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/details_exercise/details_exercise_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/exercises_database/exercises_database_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/exercises_database/exercises_database_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/z_equipment_b_s/z_equipment_b_s_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/z_equipment_b_s/z_equipment_b_s_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/z_muscle_groups_b_s/z_muscle_groups_b_s_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p3_gym/exercises/z_muscle_groups_b_s/z_muscle_groups_b_s_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p4_analysis/analysis_results_page/analysis_results_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p4_analysis/analysis_results_page/analysis_results_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p4_analysis/home_page_analysis/home_page_analysis_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p4_analysis/home_page_analysis/home_page_analysis_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p4_analysis/scan_welcome/scan_welcome_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p4_analysis/scan_welcome/scan_welcome_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_nutrition/home_page_nutrition_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_nutrition/home_page_nutrition_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_profile/home_page_profile_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_profile/home_page_profile_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_progress/home_page_progress_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_progress/home_page_progress_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_training/home_page_training_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/home_page_training/home_page_training_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheet_username/bottom_sheet_username_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheet_username/bottom_sheet_username_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_allergies/bottom_sheet_allergies_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_allergies/bottom_sheet_allergies_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_dietary_type/bottom_sheet_dietary_type_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_dietary_type/bottom_sheet_dietary_type_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_meals_per_day/bottom_sheet_meals_per_day_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_meals_per_day/bottom_sheet_meals_per_day_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_nutri_objective/bottom_sheet_nutri_objective_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_nutritional_information/bottom_sheet_nutri_objective/bottom_sheet_nutri_objective_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_age/bottom_sheet_age_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_age/bottom_sheet_age_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_chronic_conditions/bottom_sheet_chronic_conditions_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_chronic_conditions/bottom_sheet_chronic_conditions_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_gender/bottom_sheet_gender_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_gender/bottom_sheet_gender_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_height/bottom_sheet_height_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_height/bottom_sheet_height_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_weight/bottom_sheet_weight_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/bottom_sheets_user_personalization/bottom_sheet_weight/bottom_sheet_weight_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/button/button_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/button/button_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/fit_mirror_ai_logo/fit_mirror_ai_logo_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/fit_mirror_ai_logo/fit_mirror_ai_logo_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/sign_up_log_in/sign_up_log_in_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/other/sign_up_log_in/sign_up_log_in_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/profile_settings/profile_nutrition_details/profile_nutrition_details_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/profile_settings/profile_nutrition_details/profile_nutrition_details_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/profile_settings/profile_training_details/profile_training_details_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/profile_settings/profile_training_details/profile_training_details_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/profile_settings/profile_user_personalization/profile_user_personalization_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p5_home_pages/profile_settings/profile_user_personalization/profile_user_personalization_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p6_settings/fitness_plan_manage/fitness_plan_manage_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p6_settings/fitness_plan_manage/fitness_plan_manage_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p6_settings/settings_page/settings_page_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p6_settings/settings_page/settings_page_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/calendar/calendar_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/calendar/calendar_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_age/input_field_age_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_age/input_field_age_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_goal_weight/input_field_goal_weight_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_goal_weight/input_field_goal_weight_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_height/input_field_height_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_height/input_field_height_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_weight/input_field_weight_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_field_weight/input_field_weight_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_speed/input_speed_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/input_speed/input_speed_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/interactive_button_action/interactive_button_action_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/interactive_button_action/interactive_button_action_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/interactive_button_double/interactive_button_double_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/interactive_button_double/interactive_button_double_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/button_next/button_next_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/button_next/button_next_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/height_picker_item_cm/height_picker_item_cm_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/height_picker_item_cm/height_picker_item_cm_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/interactive_button_int/interactive_button_int_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/interactive_button_int/interactive_button_int_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/interactive_button_string/interactive_button_string_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/p_z_components/questionnary_comp/interactive_button_string/interactive_button_string_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/testing/gym_page_view/gym_page_view_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/testing/gym_page_view/gym_page_view_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/testing/main_page_view/main_page_view_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/testing/main_page_view/main_page_view_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/testing/nutri_page_view/nutri_page_view_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/testing/nutri_page_view/nutri_page_view_widget.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/widget_test.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/flutter_bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/icons/Icon-192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/icons/Icon-512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="302d5njMFVjv2tmhrC3lDtAUCqT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Flutter.main.dart.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c84a2cc1-ad4a-48a1-aa5e-73feabb74d52" name="Changes" comment="" />
+      <created>1752829422403</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1752829422403</updated>
+    </task>
+    <servers />
+  </component>
+</project>
