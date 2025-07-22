@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart'; // Para navegar con GoRouter
+import 'package:firebase_auth/firebase_auth.dart'; // ¡AÑADIDO! Para obtener el UID del usuario
 // Importa tu controlador para el cuestionario de gimnasio
 import 'package:fitmirror_ai/features/user_profile/presentation/providers/gym_questionnaire_controller.dart'; // Asegúrate de tenerlo importado
 // Importa el provider del perfil de usuario para actualizar el paso
@@ -63,18 +64,30 @@ class _GymQuestionnaireScreenState
 
   Future<void> _handleFinishGymQuestionnaire() async {
     // 1. Guardar los datos específicos del cuestionario de gimnasio
-    // Asegúrate de que gymQuestionnaireControllerProvider esté definido y descomentado en tus imports
-    // final gymController = ref.read(gymQuestionnaireControllerProvider.notifier);
-    // await gymController.saveGymQuestionnaireData(); // Llama a tu método de guardar
+    final gymController = ref.read(gymQuestionnaireControllerProvider.notifier);
+    final user = FirebaseAuth.instance.currentUser; // Obtener el usuario actual
 
-    // 2. Actualizar el paso del cuestionario en el perfil completo del usuario
-    // ¡CORREGIDO AQUÍ! Usamos userProfileNotifierProvider
-    final userProfileNotifier = ref.read(userProfileNotifierProvider.notifier);
+    if (user == null) {
+      print(
+          'Error: Usuario no logueado al finalizar el cuestionario de gimnasio.');
+      // Mostrar un mensaje de error al usuario si es necesario
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Error: No se pudo guardar el cuestionario. Inicia sesión.')),
+      );
+      return;
+    }
 
     try {
-      // Suponemos que ya has guardado los datos de gym a través de su controlador correspondiente
-      // Ahora actualiza el paso del cuestionario a 'nutrition' en el perfil completo del usuario
-      await userProfileNotifier.updateQuestionnaireStep(
+      // Llama a tu método de guardar los datos del cuestionario de gimnasio
+      await gymController.saveGymQuestionnaireData();
+
+      // 2. Actualizar el paso del cuestionario en el perfil completo del usuario
+      final userProfileNotifier =
+          ref.read(userProfileNotifierProvider.notifier);
+      // ¡CORREGIDO AQUÍ! Pasa el UID del usuario como primer argumento
+      await userProfileNotifier.updateQuestionnaireStep(user.uid,
           'nutrition'); // Asegúrate de que este método existe en tu Notifier
 
       print(

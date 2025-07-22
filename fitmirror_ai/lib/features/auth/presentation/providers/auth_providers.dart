@@ -84,9 +84,10 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           weightKg: 0.0,
           goalWeightKg: 0.0,
           weightChangeSpeed: WeightChangeSpeed.normal,
+          // Añadido activityLevel para que coincida con la entidad
+          activityLevel: ActivityLevel.sedentary,
         );
 
-        // MODIFICADO: preferredExercises, dislikedExercises, injuries YA NO VAN AQUÍ
         final initialGymQuestionnaire = GymQuestionnaireDataEntity(
           workoutPlace: WorkoutPlace.home,
           exerciseFrequency: 0,
@@ -107,16 +108,15 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         );
 
         // Después de un registro exitoso, guarda un perfil de usuario inicial en Firestore
-        // MODIFICADO: preferredExercises, dislikedExercises, injuries AHORA VAN AQUÍ
         final initialProfile = CompleteUserProfileEntity(
-          userId: user.uid,
+          uid: user.uid, // ¡CORREGIDO! Cambiado de userId a uid (línea 111/112)
           username: username,
           mainQuestionnaire: initialMainQuestionnaire,
           gymQuestionnaire: initialGymQuestionnaire,
           nutritionQuestionnaire: initialNutritionQuestionnaire,
-          preferredExercises: const [], // AHORA AQUÍ
-          dislikedExercises: const [], // AHORA AQUÍ
-          injuries: const [], // AHORA AQUÍ
+          preferredExercises: const [],
+          dislikedExercises: const [],
+          injuries: const [],
           preferredLanguage: 'es',
           questionnaireStep: 'initial',
           onboardingCompleted: false,

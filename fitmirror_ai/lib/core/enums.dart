@@ -36,6 +36,13 @@ enum ActivityLevel {
   extraActive, // Ejercicio muy duro/trabajo físico
 }
 
+// ¡NUEVO ENUM AÑADIDO!
+enum WeightChangeGoal {
+  maintain,
+  lose,
+  gain,
+}
+
 enum MuscleGroupFocus {
   upper,
   lower,
@@ -92,6 +99,11 @@ extension GenderExtension on Gender {
         return "Otro";
     }
   }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
+  }
 }
 
 extension GoalExtension on Goal {
@@ -124,6 +136,11 @@ extension GoalExtension on Goal {
         return "Salud general";
     }
   }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
+  }
 }
 
 extension WorkoutPlaceExtension on WorkoutPlace {
@@ -152,6 +169,11 @@ extension WorkoutPlaceExtension on WorkoutPlace {
         return "Casa y gimnasio";
     }
   }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
+  }
 }
 
 extension WeightChangeSpeedExtension on WeightChangeSpeed {
@@ -168,6 +190,11 @@ extension WeightChangeSpeedExtension on WeightChangeSpeed {
       case WeightChangeSpeed.fast:
         return "Rápida";
     }
+  }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
   }
 }
 
@@ -191,6 +218,34 @@ extension ActivityLevelExtension on ActivityLevel {
         return "Extra activo";
     }
   }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
+  }
+}
+
+// ¡NUEVA EXTENSIÓN AÑADIDA!
+extension WeightChangeGoalExtension on WeightChangeGoal {
+  String toShortString() {
+    return toString().split('.').last;
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case WeightChangeGoal.maintain:
+        return "Mantener";
+      case WeightChangeGoal.lose:
+        return "Perder";
+      case WeightChangeGoal.gain:
+        return "Ganar";
+    }
+  }
+
+  String toApiString() {
+    // Añadido para consistencia
+    return toShortString(); // Mismo que el short string para API
+  }
 }
 
 extension MuscleGroupFocusExtension on MuscleGroupFocus {
@@ -212,6 +267,11 @@ extension MuscleGroupFocusExtension on MuscleGroupFocus {
         return "Cuerpo completo";
     }
   }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
+  }
 }
 
 extension CardioTypeExtension on CardioType {
@@ -231,6 +291,11 @@ extension CardioTypeExtension on CardioType {
         return "Intenso";
     }
   }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
+  }
 }
 
 extension DietaryTypeExtension on DietaryType {
@@ -249,6 +314,11 @@ extension DietaryTypeExtension on DietaryType {
       case DietaryType.vegan:
         return "Vegana";
     }
+  }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
   }
 }
 
@@ -272,6 +342,11 @@ extension DietFocusExtension on DietFocus {
       case DietFocus.keto:
         return "Keto";
     }
+  }
+
+  String toShortString() {
+    // Añadido para consistencia
+    return toString().split('.').last;
   }
 }
 
@@ -339,6 +414,17 @@ ActivityLevel? activityLevelFromString(String? value) {
   if (value == null) return null;
   try {
     return ActivityLevel.values.firstWhere((e) => e.name == value);
+  } catch (e) {
+    return null;
+  }
+}
+
+// ¡NUEVA FUNCIÓN AÑADIDA!
+WeightChangeGoal? weightChangeGoalFromString(String? value) {
+  if (value == null) return null;
+  try {
+    return WeightChangeGoal.values
+        .firstWhere((e) => e.toShortString() == value);
   } catch (e) {
     return null;
   }

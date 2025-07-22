@@ -1,10 +1,7 @@
 // lib/app_router.dart
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// Importa tus providers de autenticación y perfil
 import 'package:fitmirror_ai/features/auth/presentation/providers/auth_providers.dart';
 import 'package:fitmirror_ai/features/auth/presentation/screens/login_screen.dart';
 import 'package:fitmirror_ai/features/auth/presentation/screens/register_screen.dart';
@@ -12,18 +9,16 @@ import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_p
 import 'package:fitmirror_ai/features/user_profile/presentation/screens/main_questionnaire_screen.dart';
 import 'package:fitmirror_ai/features/user_profile/presentation/screens/gym_questionnaire_screen.dart';
 import 'package:fitmirror_ai/features/user_profile/presentation/screens/nutrition_questionnaire_screen.dart';
-import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart'; // Importa la entidad
+import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateChangesProvider);
-
   final String? uid = authState.valueOrNull?.uid;
 
   final AsyncValue<String?> questionnaireStep = uid != null
       ? ref.watch(completeUserProfileStreamProvider(uid).select(
-          // Usa uid aquí
           (AsyncValue<CompleteUserProfileEntity?> data) {
             return data.when(
               data: (profile) => AsyncData(profile?.questionnaireStep),
@@ -36,7 +31,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
   final AsyncValue<bool?> onboardingCompletedStatus = uid != null
       ? ref.watch(completeUserProfileStreamProvider(uid).select(
-          // Usa uid aquí
           (AsyncValue<CompleteUserProfileEntity?> data) {
             return data.when(
               data: (profile) => AsyncData(profile?.onboardingCompleted),
@@ -56,6 +50,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final String? currentQuestionnaireStep = questionnaireStep.value;
       final bool onboardingCompleted = onboardingCompletedStatus.value ?? false;
 
+      // Si estamos cargando, no redirigir
       if (authState.isLoading ||
           questionnaireStep.isLoading ||
           onboardingCompletedStatus.isLoading) {
@@ -74,18 +69,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           isGymQuestionnaireRoute ||
           isNutritionQuestionnaireRoute;
 
+      // 1. Manejo de usuario no autenticado
       if (!loggedIn && !isAuthRoute) {
         return '/login';
       }
 
-      if (!onboardingCompleted) {
+      // 2. Manejo de onboarding no completado (SOLO para usuarios autenticados)
+      if (loggedIn && !onboardingCompleted) {
+        // CORRECCIÓN: No redirigir desde rutas de autenticación
         if (isAuthRoute) {
-          if (currentQuestionnaireStep == 'gym') return '/gym-questionnaire';
-          if (currentQuestionnaireStep == 'nutrition')
-            return '/nutrition-questionnaire';
-          return '/main-questionnaire';
+          return null; // Permanece en la ruta de autenticación
         }
 
+        // Redirigir según el paso del cuestionario
         if ((currentQuestionnaireStep == null ||
                 currentQuestionnaireStep == 'initial' ||
                 currentQuestionnaireStep == 'main') &&
@@ -102,7 +98,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
-      if (onboardingCompleted && (isAuthRoute || isOnAnyQuestionnaireRoute)) {
+      // 3. Manejo de onboarding completado
+      if (loggedIn &&
+          onboardingCompleted &&
+          (isAuthRoute || isOnAnyQuestionnaireRoute)) {
         return '/';
       }
 

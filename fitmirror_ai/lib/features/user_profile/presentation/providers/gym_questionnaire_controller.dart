@@ -78,7 +78,9 @@ class GymQuestionnaireController extends _$GymQuestionnaireController {
 
     try {
       await state.whenData((data) async {
-        await _userProfileRepository.saveGymQuestionnaireData(uid, data);
+        // ¡CORREGIDO! Convierte 'data' a un mapa antes de pasarlo al repositorio
+        await _userProfileRepository.saveGymQuestionnaireData(
+            uid, data.toMap());
         print('Gym Questionnaire data saved for UID: $uid');
         // Vuelve al estado cargado con los datos actualizados después de guardar
         state = AsyncData(data);

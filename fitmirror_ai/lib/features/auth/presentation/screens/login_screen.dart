@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fitmirror_ai/features/auth/presentation/providers/auth_providers.dart';
-// LA LÍNEA DE IMPORTACIÓN DE .G.DART YA DEBERÍA ESTAR ELIMINADA DE AQUÍ
+import 'package:fitmirror_ai/features/auth/domain/entities/user_entity.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -16,7 +16,37 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); // Clave para validar el formulario
+  final _formKey = GlobalKey<FormState>();
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Solo inicialización básica, no listeners de Riverpod
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      _isInitialized = true;
+      // Posponer la configuración del listener hasta después del primer build
+      Future.microtask(() => _setupAuthListener());
+    }
+  }
+
+  void _setupAuthListener() {
+    ref.listen<AsyncValue<UserEntity?>>(
+      authStateChangesProvider,
+      (_, state) {
+        state.whenData((user) {
+          if (user != null && context.mounted) {
+            context.go('/');
+          }
+        });
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -27,33 +57,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _signIn() async {
     if (_formKey.currentState!.validate()) {
-      // Si el formulario es válido, intenta iniciar sesión
       final email = _emailController.text.trim();
       final password = _passwordController.text.trim();
 
-      // Muestra un indicador de carga
-      // CAMBIO IMPORTANTE: Eliminamos .notifier aquí
-      ref
-          .read(authControllerProvider)
-          .signIn(email, password); // <-- ¡CAMBIO AQUÍ!
+      ref.read(authControllerProvider).signIn(email, password);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Observa el estado del AuthController para feedback al usuario
-    // Usamos .select para observar explícitamente la propiedad 'state' del AuthController
+    // Configurar listeners solo en build
     ref.listen<AsyncValue<void>>(
       authControllerProvider.select((controller) => controller.state),
       (previous, next) {
         next.when(
           data: (data) {
-            // No hacemos nada especial aquí, el redirect de GoRouter se encargará
-            // de navegar si el login es exitoso.
+            // Redirigir mediante el listener principal
           },
-          loading: () {
-            // Podrías mostrar un diálogo de carga, pero el botón ya estará deshabilitado.
-          },
+          loading: () {},
           error: (error, stackTrace) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -65,7 +86,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       },
     );
 
-    // Observa el estado del AuthController para controlar el indicador de carga del botón
     final authControllerState = ref
         .watch(authControllerProvider.select((controller) => controller.state));
     final isLoading = authControllerState is AsyncLoading;
@@ -120,9 +140,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 24.0),
                 ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : _signIn, // Deshabilita el botón si está cargando
+                  onPressed: isLoading ? null : _signIn,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                   ),
@@ -135,8 +153,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: isLoading
                       ? null
                       : () {
-                          context.go(
-                              '/register'); // Navega a la pantalla de registro
+                          context.go('/register');
                         },
                   child: const Text('¿No tienes cuenta? Regístrate aquí.'),
                 ),

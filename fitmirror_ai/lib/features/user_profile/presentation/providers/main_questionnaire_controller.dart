@@ -74,7 +74,7 @@ class MainQuestionnaireController extends _$MainQuestionnaireController {
         // Esto no debería ocurrir si ya creamos un perfil inicial en el registro,
         // pero es un buen fallback.
         currentProfile = CompleteUserProfileEntity(
-          userId: userId,
+          uid: userId, // ¡CORREGIDO! Cambiado de userId a uid (líneas 76/77)
           username:
               '', // El username debería obtenerse de otro lado o ser un campo de la primera pantalla
           mainQuestionnaire: data, // ¡Usa los datos pasados como argumento!

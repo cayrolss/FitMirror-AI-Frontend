@@ -3,20 +3,18 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:fitmirror_ai/features/auth/domain/entities/user_entity.dart';
 import 'package:fitmirror_ai/features/auth/domain/repositories/auth_repository.dart';
-import 'package:fitmirror_ai/features/user_profile/domain/repositories/user_profile_repository.dart'; // Importa el repositorio de perfil
-import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart'; // Importa la entidad de perfil
+import 'package:fitmirror_ai/features/user_profile/domain/repositories/user_profile_repository.dart';
+import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart';
 import 'package:fitmirror_ai/features/user_profile/domain/entities/main_questionnaire_data_entity.dart';
 import 'package:fitmirror_ai/features/user_profile/domain/entities/gym_questionnaire_data_entity.dart';
 import 'package:fitmirror_ai/features/user_profile/domain/entities/nutrition_questionnaire_data_entity.dart';
-import 'package:fitmirror_ai/core/enums.dart'; // Importa tus enums si los usas para valores por defecto
+import 'package:fitmirror_ai/core/enums.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final fb_auth.FirebaseAuth _firebaseAuth;
-  final UserProfileRepository
-      _userProfileRepository; // Inyecta el repositorio de perfil
+  final UserProfileRepository _userProfileRepository;
 
-  AuthRepositoryImpl(this._firebaseAuth,
-      this._userProfileRepository); // Constructor actualizado para la inyección
+  AuthRepositoryImpl(this._firebaseAuth, this._userProfileRepository);
 
   @override
   Stream<UserEntity?> get authStateChanges {
@@ -76,55 +74,57 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       );
+
       if (credential.user != null) {
-        await credential.user!.updateDisplayName(username);
         final newUser = UserEntity(
           uid: credential.user!.uid,
           email: credential.user!.email,
           name: username,
         );
 
-        // MODIFICADO: Ahora preferredExercises, dislikedExercises, injuries van directamente en CompleteUserProfileEntity
         final initialProfile = CompleteUserProfileEntity(
-          userId: newUser.uid,
+          uid: newUser.uid,
           username: newUser.name,
           mainQuestionnaire: const MainQuestionnaireDataEntity(
             goal: Goal.generalHealth,
             gender: Gender.other,
             age: 0,
             heightCm: 0,
-            weightKg: 0.0, // Valores por defecto
-            goalWeightKg:
-                0.0, // Asegúrate de que este campo esté en MainQuestionnaireDataEntity si es requerido
-            weightChangeSpeed: WeightChangeSpeed
-                .normal, // Asegúrate de que este campo esté en MainQuestionnaireDataEntity si es requerido
+            weightKg: 0.0,
+            goalWeightKg: 0.0,
+            weightChangeSpeed: WeightChangeSpeed.normal,
+            activityLevel: ActivityLevel.sedentary,
           ),
           gymQuestionnaire: const GymQuestionnaireDataEntity(
             workoutPlace: WorkoutPlace.home,
             exerciseFrequency: 0,
-            muscleGroupFocus: [],
+            muscleGroupFocus: const [],
             weeklyTrainings: 0,
             cardioType: CardioType.none,
             cardioFrequency: 0,
-            // preferredExercises, dislikedExercises, injuries YA NO VAN AQUÍ
           ),
           nutritionQuestionnaire: const NutritionQuestionnaireDataEntity(
             dietaryType: DietaryType.standard,
             dietFocus: DietFocus.balanced,
             mealsPerDay: 0,
-            allergies: [],
-            likedFoods: [],
-            dislikedFoods: [],
-            dietaryRestrictions: [],
+            allergies: const [],
+            likedFoods: const [],
+            dislikedFoods: const [],
+            dietaryRestrictions: const [],
           ),
-          preferredExercises: [], // AHORA AQUÍ
-          dislikedExercises: [], // AHORA AQUÍ
-          injuries: [], // AHORA AQUÍ
+          preferredExercises: const [],
+          dislikedExercises: const [],
+          injuries: const [],
           preferredLanguage: 'es',
           questionnaireStep: 'initial',
           onboardingCompleted: false,
         );
-        await _userProfileRepository.saveUserProfile(initialProfile);
+
+        // 🔥 ARREGLO CLAVE: Operaciones paralelas
+        await Future.wait([
+          credential.user!.updateDisplayName(username),
+          _userProfileRepository.saveUserProfile(initialProfile)
+        ]);
 
         return newUser;
       }

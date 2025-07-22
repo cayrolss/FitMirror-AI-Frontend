@@ -1,13 +1,13 @@
 // lib/features/user_profile/presentation/screens/main_questionnaire_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fitmirror_ai/features/user_profile/presentation/providers/main_questionnaire_controller.dart';
-import 'package:fitmirror_ai/core/enums.dart'; // Para los Enums
+import 'package:fitmirror_ai/core/enums.dart';
 import 'package:fitmirror_ai/features/user_profile/domain/entities/main_questionnaire_data_entity.dart';
 import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart';
 import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_profile_providers.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitmirror_ai/features/auth/presentation/providers/auth_providers.dart'; // Importación añadida
 
 class MainQuestionnaireScreen extends ConsumerStatefulWidget {
   const MainQuestionnaireScreen({super.key});
@@ -37,11 +37,13 @@ class _MainQuestionnaireScreenState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final user = FirebaseAuth.instance.currentUser;
+      // Usar Riverpod para obtener el usuario
+      final authState = ref.read(authStateChangesProvider);
+      final user = authState.valueOrNull;
+
       if (user != null) {
-        final currentProfile = ref
-            .read(completeUserProfileStreamProvider(user.uid)) // Usa user.uid
-            .value;
+        final currentProfile =
+            ref.read(completeUserProfileStreamProvider(user.uid)).value;
         if (currentProfile != null) {
           _nameController.text = currentProfile.username ?? '';
           final mainData = currentProfile.mainQuestionnaire;
@@ -55,7 +57,26 @@ class _MainQuestionnaireScreenState
 
           _selectedGender = mainData.gender;
           _selectedActivityLevel = mainData.activityLevel;
-          _selectedWeightChangeGoal = mainData.weightChangeGoal;
+          // Mapear Goal a WeightChangeGoal al cargar datos existentes
+          switch (mainData.goal) {
+            case Goal.maintainWeight:
+              _selectedWeightChangeGoal = WeightChangeGoal.maintain;
+              break;
+            case Goal.loseWeight:
+              _selectedWeightChangeGoal = WeightChangeGoal.lose;
+              break;
+            case Goal.gainMuscle:
+              _selectedWeightChangeGoal = WeightChangeGoal.gain;
+              break;
+            case Goal.improveFitness:
+            case Goal.generalHealth:
+              _selectedWeightChangeGoal = WeightChangeGoal.maintain;
+              break;
+            default:
+              _selectedWeightChangeGoal =
+                  WeightChangeGoal.maintain; // Default seguro
+              break;
+          }
           _selectedWeightChangeSpeed = mainData.weightChangeSpeed;
         }
       }
@@ -75,6 +96,7 @@ class _MainQuestionnaireScreenState
 
   void _nextPage() {
     if (_currentPage < 3) {
+      // Asumiendo 4 páginas (0 a 3)
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
@@ -100,32 +122,54 @@ class _MainQuestionnaireScreenState
   }
 
   void _handleFinishQuestionnaire() async {
+    // CORRECCIÓN: Usar los nombres correctos de los providers
     final mainQuestionnaireController =
         ref.read(mainQuestionnaireControllerProvider.notifier);
-    final userProfileNotifier =
-        ref.read(userProfileControllerProvider.notifier);
-    final user = FirebaseAuth.instance.currentUser;
+    final userProfileNotifier = ref.read(userProfileNotifierProvider.notifier);
+
+    // Obtener usuario con Riverpod
+    final authState = ref.read(authStateChangesProvider);
+    final user = authState.valueOrNull;
 
     if (user == null) {
-      print(
-          'Error: Usuario no logueado al finalizar el cuestionario principal.');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Error: Sesión expirada. Redirigiendo...')),
+        );
+        context.go('/login');
+      }
       return;
+    }
+
+    // Mapear WeightChangeGoal a Goal para MainQuestionnaireDataEntity
+    Goal selectedGoalEnum;
+    switch (_selectedWeightChangeGoal) {
+      case WeightChangeGoal.maintain:
+        selectedGoalEnum = Goal.maintainWeight;
+        break;
+      case WeightChangeGoal.lose:
+        selectedGoalEnum = Goal.loseWeight;
+        break;
+      case WeightChangeGoal.gain:
+        selectedGoalEnum = Goal.gainMuscle;
+        break;
+      default:
+        selectedGoalEnum = Goal.generalHealth;
     }
 
     final mainData = MainQuestionnaireDataEntity(
       age: int.tryParse(_ageController.text) ?? 0,
-      gender: _selectedGender ?? Gender.male,
+      gender: _selectedGender ?? Gender.other,
       heightCm: int.tryParse(_heightController.text) ?? 0,
       weightKg: double.tryParse(_currentWeightController.text) ?? 0.0,
       activityLevel: _selectedActivityLevel ?? ActivityLevel.sedentary,
-      weightChangeGoal: _selectedWeightChangeGoal ?? WeightChangeGoal.maintain,
+      goal: selectedGoalEnum,
       goalWeightKg: double.tryParse(_goalWeightController.text),
       weightChangeSpeed: _selectedWeightChangeSpeed ?? WeightChangeSpeed.normal,
     );
 
-    await mainQuestionnaireController.saveMainQuestionnaireData(
-        user.uid, mainData);
-
+    await mainQuestionnaireController.saveMainQuestionnaireData(mainData);
     await userProfileNotifier.updateQuestionnaireStep(user.uid, 'gym');
 
     if (context.mounted) {
@@ -135,8 +179,10 @@ class _MainQuestionnaireScreenState
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    // Pasa el uid al provider, si user es null, pasa un string vacío para evitar null
+    // Obtener usuario con Riverpod
+    final authState = ref.read(authStateChangesProvider);
+    final user = authState.valueOrNull;
+
     final AsyncValue<CompleteUserProfileEntity?> userProfileAsync =
         ref.watch(completeUserProfileStreamProvider(user?.uid ?? ''));
 
@@ -183,20 +229,23 @@ class _MainQuestionnaireScreenState
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (_currentPage < 3)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (_currentPage > 0)
+                    ElevatedButton(
+                      onPressed: _previousPage,
+                      child: const Text('Anterior'),
+                    ),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: _nextPage,
-                    child: const Text('Siguiente'),
+                    child: Text(_currentPage == 3 ? 'Finalizar' : 'Siguiente'),
                   ),
-                if (_currentPage == 3)
-                  ElevatedButton(
-                    onPressed: _handleFinishQuestionnaire,
-                    child: const Text('Finalizar'),
-                  ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -337,6 +386,11 @@ class _MainQuestionnaireScreenState
     );
   }
 }
+
+// Las clases GenderSelectionChips, ActivityLevelChips, WeightChangeGoalChips,
+// WeightChangeSpeedChips y las extensiones EnumExtension, StringCasingExtension
+// se mantienen igual que en tu código original ya que no presentaban errores
+// o los errores se solucionaron al añadir el enum WeightChangeGoal.
 
 class GenderSelectionChips extends StatelessWidget {
   final Gender? selectedGender;

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart'; // Para navegar con GoRouter
+import 'package:firebase_auth/firebase_auth.dart'; // ¡AÑADIDO! Para obtener el UID del usuario
 // Importa tu controlador para el cuestionario de nutrición
 import 'package:fitmirror_ai/features/user_profile/presentation/providers/nutrition_questionnaire_controller.dart'; // Asegúrate de tenerlo importado
 // Importa el provider del perfil de usuario para actualizar el paso
@@ -62,20 +63,34 @@ class _NutritionQuestionnaireScreenState
 
   Future<void> _handleFinishNutritionQuestionnaire() async {
     // 1. Guardar los datos específicos del cuestionario de nutrición
-    // Asegúrate de que nutritionQuestionnaireControllerProvider esté definido y descomentado en tus imports
-    // final nutritionController = ref.read(nutritionQuestionnaireControllerProvider.notifier);
-    // await nutritionController.saveNutritionQuestionnaireData(); // Llama a tu método de guardar
+    final nutritionController =
+        ref.read(nutritionQuestionnaireControllerProvider.notifier);
+    final user = FirebaseAuth.instance.currentUser; // Obtener el usuario actual
 
-    // 2. Actualizar el perfil del usuario (onboarding completado y paso del cuestionario)
-    // ¡CORREGIDO AQUÍ! Usamos userProfileNotifierProvider
-    final userProfileNotifier = ref.read(userProfileNotifierProvider.notifier);
+    if (user == null) {
+      print(
+          'Error: Usuario no logueado al finalizar el cuestionario de nutrición.');
+      // Mostrar un mensaje de error al usuario si es necesario
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Error: No se pudo guardar el cuestionario. Inicia sesión.')),
+      );
+      return;
+    }
 
     try {
-      // Suponemos que ya has guardado los datos de nutrición a través de su controlador correspondiente
-      // Una vez completado, marcamos el onboarding como TRUE y el questionnaireStep como null o "completed"
+      // Llama a tu método de guardar los datos del cuestionario de nutrición
+      await nutritionController.saveNutritionQuestionnaireData();
+
+      // 2. Actualizar el perfil del usuario (onboarding completado y paso del cuestionario)
+      final userProfileNotifier =
+          ref.read(userProfileNotifierProvider.notifier);
+
+      // ¡CORREGIDO AQUÍ! Pasa el UID del usuario como primer argumento
       await userProfileNotifier.updateOnboardingCompleted(
-          true); // Método para marcar como completado
-      await userProfileNotifier.updateQuestionnaireStep(
+          user.uid, true); // Método para marcar como completado
+      await userProfileNotifier.updateQuestionnaireStep(user.uid,
           'completed'); // O null, según tu preferencia para el estado final
 
       print(

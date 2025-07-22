@@ -99,7 +99,9 @@ class NutritionQuestionnaireController
 
     try {
       await state.whenData((data) async {
-        await _userProfileRepository.saveNutritionQuestionnaireData(uid, data);
+        // ¡CORREGIDO! Convierte 'data' a un mapa antes de pasarlo al repositorio
+        await _userProfileRepository.saveNutritionQuestionnaireData(
+            uid, data.toMap());
         print('Nutrition Questionnaire data saved for UID: $uid');
         state = AsyncData(
             data); // Vuelve al estado cargado con los datos actualizados

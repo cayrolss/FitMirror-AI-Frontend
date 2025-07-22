@@ -7,7 +7,7 @@ part of 'gym_questionnaire_controller.dart';
 // **************************************************************************
 
 String _$gymQuestionnaireControllerHash() =>
-    r'5b79013ca10e4c420ca9623e2644c89a7d85c28c';
+    r'690412fbd3272e42763bc3980f7d60e35e90b027';
 
 /// See also [GymQuestionnaireController].
 @ProviderFor(GymQuestionnaireController)
