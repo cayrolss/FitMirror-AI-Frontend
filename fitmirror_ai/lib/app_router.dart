@@ -4,61 +4,117 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Importa tus providers de autenticación
+// Importa tus providers de autenticación y perfil
 import 'package:fitmirror_ai/features/auth/presentation/providers/auth_providers.dart';
 import 'package:fitmirror_ai/features/auth/presentation/screens/login_screen.dart';
-import 'package:fitmirror_ai/features/auth/presentation/screens/register_screen.dart'; // Crearemos esta
-// import 'package:fitmirror_ai/features/dashboard/presentation/screens/dashboard_screen.dart'; // Crearás esta para la app principal
+import 'package:fitmirror_ai/features/auth/presentation/screens/register_screen.dart';
+import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_profile_providers.dart';
+import 'package:fitmirror_ai/features/user_profile/presentation/screens/main_questionnaire_screen.dart';
+import 'package:fitmirror_ai/features/user_profile/presentation/screens/gym_questionnaire_screen.dart';
+import 'package:fitmirror_ai/features/user_profile/presentation/screens/nutrition_questionnaire_screen.dart';
+import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart'; // Importa la entidad
 
-// La clave global para GoRouter (útil para la navegación sin BuildContext)
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-// Definición del GoRouter Provider
-// Usamos Riverpod para gestionar la instancia de GoRouter
 final goRouterProvider = Provider<GoRouter>((ref) {
-  final authState =
-      ref.watch(authStateChangesProvider); // Observa el estado de autenticación
+  final authState = ref.watch(authStateChangesProvider);
+
+  final String? uid = authState.valueOrNull?.uid;
+
+  final AsyncValue<String?> questionnaireStep = uid != null
+      ? ref.watch(completeUserProfileStreamProvider(uid).select(
+          // Usa uid aquí
+          (AsyncValue<CompleteUserProfileEntity?> data) {
+            return data.when(
+              data: (profile) => AsyncData(profile?.questionnaireStep),
+              loading: () => const AsyncLoading(),
+              error: (err, stack) => AsyncError(err, stack),
+            );
+          },
+        ))
+      : const AsyncData(null);
+
+  final AsyncValue<bool?> onboardingCompletedStatus = uid != null
+      ? ref.watch(completeUserProfileStreamProvider(uid).select(
+          // Usa uid aquí
+          (AsyncValue<CompleteUserProfileEntity?> data) {
+            return data.when(
+              data: (profile) => AsyncData(profile?.onboardingCompleted),
+              loading: () => const AsyncLoading(),
+              error: (err, stack) => AsyncError(err, stack),
+            );
+          },
+        ))
+      : const AsyncData(false);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/', // Ruta inicial por defecto
-
-    // Redirige al usuario según su estado de autenticación
+    initialLocation: '/',
+    debugLogDiagnostics: true,
     redirect: (BuildContext context, GoRouterState state) {
-      final loggedIn =
-          authState.value != null; // true si hay un usuario logueado
+      final bool loggedIn = authState.valueOrNull != null;
+      final String? currentQuestionnaireStep = questionnaireStep.value;
+      final bool onboardingCompleted = onboardingCompletedStatus.value ?? false;
 
-      // Rutas protegidas (requieren autenticación)
-      final bool goingToProtectedRoute = state.matchedLocation == '/' ||
-          state.matchedLocation
-              .startsWith('/dashboard'); // Ejemplo de ruta protegida
-
-      // Rutas de autenticación (no requieren autenticación)
-      final bool goingToAuthRoute =
-          state.matchedLocation.startsWith('/login') ||
-              state.matchedLocation.startsWith('/register');
-
-      if (!loggedIn && goingToProtectedRoute) {
-        // Si no está logueado y va a una ruta protegida, redirige a login
-        return '/login';
-      } else if (loggedIn && goingToAuthRoute) {
-        // Si está logueado y va a una ruta de autenticación, redirige a la principal
-        return '/'; // O '/dashboard'
+      if (authState.isLoading ||
+          questionnaireStep.isLoading ||
+          onboardingCompletedStatus.isLoading) {
+        return null;
       }
 
-      // No hay redirección si el usuario está en una ruta adecuada para su estado
+      final bool isAuthRoute =
+          state.uri.path == '/login' || state.uri.path == '/register';
+      final bool isMainQuestionnaireRoute =
+          state.uri.path == '/main-questionnaire';
+      final bool isGymQuestionnaireRoute =
+          state.uri.path == '/gym-questionnaire';
+      final bool isNutritionQuestionnaireRoute =
+          state.uri.path == '/nutrition-questionnaire';
+      final bool isOnAnyQuestionnaireRoute = isMainQuestionnaireRoute ||
+          isGymQuestionnaireRoute ||
+          isNutritionQuestionnaireRoute;
+
+      if (!loggedIn && !isAuthRoute) {
+        return '/login';
+      }
+
+      if (!onboardingCompleted) {
+        if (isAuthRoute) {
+          if (currentQuestionnaireStep == 'gym') return '/gym-questionnaire';
+          if (currentQuestionnaireStep == 'nutrition')
+            return '/nutrition-questionnaire';
+          return '/main-questionnaire';
+        }
+
+        if ((currentQuestionnaireStep == null ||
+                currentQuestionnaireStep == 'initial' ||
+                currentQuestionnaireStep == 'main') &&
+            !isMainQuestionnaireRoute) {
+          return '/main-questionnaire';
+        }
+        if (currentQuestionnaireStep == 'gym' && !isGymQuestionnaireRoute) {
+          return '/gym-questionnaire';
+        }
+        if (currentQuestionnaireStep == 'nutrition' &&
+            !isNutritionQuestionnaireRoute) {
+          return '/nutrition-questionnaire';
+        }
+        return null;
+      }
+
+      if (onboardingCompleted && (isAuthRoute || isOnAnyQuestionnaireRoute)) {
+        return '/';
+      }
+
       return null;
     },
-
     routes: <RouteBase>[
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          // Esta será la pantalla principal de la aplicación cuando el usuario esté logueado
-          // Por ahora, solo un placeholder
           return Scaffold(
-            appBar: AppBar(title: Text('FitMirror AI - Dashboard')),
-            body: Center(
+            appBar: AppBar(title: const Text('FitMirror AI - Dashboard')),
+            body: const Center(
               child: Text('¡Bienvenido! Estás en el dashboard.'),
             ),
           );
@@ -76,7 +132,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return const RegisterScreen();
         },
       ),
-      // Puedes añadir más rutas aquí para otras partes de tu aplicación
+      GoRoute(
+        path: '/main-questionnaire',
+        builder: (BuildContext context, GoRouterState state) {
+          return const MainQuestionnaireScreen();
+        },
+      ),
+      GoRoute(
+        path: '/gym-questionnaire',
+        builder: (BuildContext context, GoRouterState state) {
+          return const GymQuestionnaireScreen();
+        },
+      ),
+      GoRoute(
+        path: '/nutrition-questionnaire',
+        builder: (BuildContext context, GoRouterState state) {
+          return const NutritionQuestionnaireScreen();
+        },
+      ),
     ],
   );
 });

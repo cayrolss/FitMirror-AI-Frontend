@@ -11,6 +11,12 @@ class NutritionQuestionnaireDataEntity extends Equatable {
   final List<String> likedFoods;
   final List<String> dislikedFoods;
   final List<String> dietaryRestrictions;
+  // Si tienes más campos en tu modelo Python o los usarás en el futuro, agrégalos aquí:
+  // final String? typicalBreakfast;
+  // final String? typicalLunch;
+  // final String? typicalDinner;
+  // final String? snackPreference;
+  // final double? hydrationLiters;
 
   const NutritionQuestionnaireDataEntity({
     this.dietaryType,
@@ -20,7 +26,65 @@ class NutritionQuestionnaireDataEntity extends Equatable {
     this.likedFoods = const [],
     this.dislikedFoods = const [],
     this.dietaryRestrictions = const [],
+    // Inicializa los campos adicionales aquí si los agregas
+    // this.typicalBreakfast,
+    // this.typicalLunch,
+    // this.typicalDinner,
+    // this.snackPreference,
+    // this.hydrationLiters,
   });
+
+  // Factory constructor para un objeto vacío/inicial
+  factory NutritionQuestionnaireDataEntity.empty() {
+    return const NutritionQuestionnaireDataEntity(
+      dietaryType: DietaryType.standard, // Valor por defecto
+      dietFocus: DietFocus.balanced, // Valor por defecto
+      mealsPerDay: 0, // Valor por defecto
+      allergies: [],
+      likedFoods: [],
+      dislikedFoods: [],
+      dietaryRestrictions: [],
+      // Valores por defecto para campos adicionales
+      // typicalBreakfast: '',
+      // typicalLunch: '',
+      // typicalDinner: '',
+      // snackPreference: '',
+      // hydrationLiters: 0.0,
+    );
+  }
+
+  // Método copyWith actualizado
+  NutritionQuestionnaireDataEntity copyWith({
+    DietaryType? dietaryType,
+    DietFocus? dietFocus,
+    int? mealsPerDay,
+    List<String>? allergies,
+    List<String>? likedFoods,
+    List<String>? dislikedFoods,
+    List<String>? dietaryRestrictions,
+    // Campos adicionales en copyWith
+    // String? typicalBreakfast,
+    // String? typicalLunch,
+    // String? typicalDinner,
+    // String? snackPreference,
+    // double? hydrationLiters,
+  }) {
+    return NutritionQuestionnaireDataEntity(
+      dietaryType: dietaryType ?? this.dietaryType,
+      dietFocus: dietFocus ?? this.dietFocus,
+      mealsPerDay: mealsPerDay ?? this.mealsPerDay,
+      allergies: allergies ?? this.allergies,
+      likedFoods: likedFoods ?? this.likedFoods,
+      dislikedFoods: dislikedFoods ?? this.dislikedFoods,
+      dietaryRestrictions: dietaryRestrictions ?? this.dietaryRestrictions,
+      // Asignación de campos adicionales
+      // typicalBreakfast: typicalBreakfast ?? this.typicalBreakfast,
+      // typicalLunch: typicalLunch ?? this.typicalLunch,
+      // typicalDinner: typicalDinner ?? this.typicalDinner,
+      // snackPreference: snackPreference ?? this.snackPreference,
+      // hydrationLiters: hydrationLiters ?? this.hydrationLiters,
+    );
+  }
 
   factory NutritionQuestionnaireDataEntity.fromMap(Map<String, dynamic> map) {
     return NutritionQuestionnaireDataEntity(
@@ -31,6 +95,12 @@ class NutritionQuestionnaireDataEntity extends Equatable {
       likedFoods: List<String>.from(map['liked_foods'] ?? []),
       dislikedFoods: List<String>.from(map['disliked_foods'] ?? []),
       dietaryRestrictions: List<String>.from(map['dietary_restrictions'] ?? []),
+      // Lectura de campos adicionales
+      // typicalBreakfast: map['typical_breakfast'] as String?,
+      // typicalLunch: map['typical_lunch'] as String?,
+      // typicalDinner: map['typical_dinner'] as String?,
+      // snackPreference: map['snack_preference'] as String?,
+      // hydrationLiters: (map['hydration_liters'] as num?)?.toDouble(),
     );
   }
 
@@ -43,6 +113,12 @@ class NutritionQuestionnaireDataEntity extends Equatable {
       'liked_foods': likedFoods,
       'disliked_foods': dislikedFoods,
       'dietary_restrictions': dietaryRestrictions,
+      // Escritura de campos adicionales
+      // 'typical_breakfast': typicalBreakfast,
+      // 'typical_lunch': typicalLunch,
+      // 'typical_dinner': typicalDinner,
+      // 'snack_preference': snackPreference,
+      // 'hydration_liters': hydrationLiters,
     };
   }
 
@@ -55,5 +131,11 @@ class NutritionQuestionnaireDataEntity extends Equatable {
         likedFoods,
         dislikedFoods,
         dietaryRestrictions,
+        // Campos adicionales en props
+        // typicalBreakfast,
+        // typicalLunch,
+        // typicalDinner,
+        // snackPreference,
+        // hydrationLiters,
       ];
 }

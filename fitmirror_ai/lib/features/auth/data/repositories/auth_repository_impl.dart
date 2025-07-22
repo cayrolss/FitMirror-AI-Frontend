@@ -84,13 +84,20 @@ class AuthRepositoryImpl implements AuthRepository {
           name: username,
         );
 
-        // NUEVO: Crea y guarda el perfil inicial para el nuevo usuario
+        // MODIFICADO: Ahora preferredExercises, dislikedExercises, injuries van directamente en CompleteUserProfileEntity
         final initialProfile = CompleteUserProfileEntity(
           userId: newUser.uid,
           username: newUser.name,
           mainQuestionnaire: const MainQuestionnaireDataEntity(
-            goal: Goal.generalHealth, gender: Gender.other, age: 0, heightCm: 0,
+            goal: Goal.generalHealth,
+            gender: Gender.other,
+            age: 0,
+            heightCm: 0,
             weightKg: 0.0, // Valores por defecto
+            goalWeightKg:
+                0.0, // Asegúrate de que este campo esté en MainQuestionnaireDataEntity si es requerido
+            weightChangeSpeed: WeightChangeSpeed
+                .normal, // Asegúrate de que este campo esté en MainQuestionnaireDataEntity si es requerido
           ),
           gymQuestionnaire: const GymQuestionnaireDataEntity(
             workoutPlace: WorkoutPlace.home,
@@ -99,8 +106,7 @@ class AuthRepositoryImpl implements AuthRepository {
             weeklyTrainings: 0,
             cardioType: CardioType.none,
             cardioFrequency: 0,
-            preferredExercises: [], dislikedExercises: [],
-            injuries: [], // NUEVOS campos con valores por defecto
+            // preferredExercises, dislikedExercises, injuries YA NO VAN AQUÍ
           ),
           nutritionQuestionnaire: const NutritionQuestionnaireDataEntity(
             dietaryType: DietaryType.standard,
@@ -111,9 +117,12 @@ class AuthRepositoryImpl implements AuthRepository {
             dislikedFoods: [],
             dietaryRestrictions: [],
           ),
-          preferredLanguage: 'es', // NUEVO
-          questionnaireStep: 'initial', // NUEVO
-          onboardingCompleted: false, // NUEVO
+          preferredExercises: [], // AHORA AQUÍ
+          dislikedExercises: [], // AHORA AQUÍ
+          injuries: [], // AHORA AQUÍ
+          preferredLanguage: 'es',
+          questionnaireStep: 'initial',
+          onboardingCompleted: false,
         );
         await _userProfileRepository.saveUserProfile(initialProfile);
 

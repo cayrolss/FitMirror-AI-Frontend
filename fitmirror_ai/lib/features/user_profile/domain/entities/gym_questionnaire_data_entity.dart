@@ -10,9 +10,7 @@ class GymQuestionnaireDataEntity extends Equatable {
   final int weeklyTrainings; // Sesiones a la semana
   final CardioType cardioType;
   final int cardioFrequency; // Días a la semana
-  final List<String> preferredExercises; // NUEVO
-  final List<String> dislikedExercises; // NUEVO
-  final List<String> injuries; // NUEVO
+  // preferredExercises, dislikedExercises, injuries HAN SIDO MOVIDOS a CompleteUserProfileEntity
 
   const GymQuestionnaireDataEntity({
     required this.workoutPlace,
@@ -21,9 +19,6 @@ class GymQuestionnaireDataEntity extends Equatable {
     required this.weeklyTrainings,
     required this.cardioType,
     required this.cardioFrequency,
-    this.preferredExercises = const [], // NUEVO: valor por defecto
-    this.dislikedExercises = const [], // NUEVO: valor por defecto
-    this.injuries = const [], // NUEVO: valor por defecto
   });
 
   // Método copyWith actualizado
@@ -34,9 +29,6 @@ class GymQuestionnaireDataEntity extends Equatable {
     int? weeklyTrainings,
     CardioType? cardioType,
     int? cardioFrequency,
-    List<String>? preferredExercises,
-    List<String>? dislikedExercises,
-    List<String>? injuries,
   }) {
     return GymQuestionnaireDataEntity(
       workoutPlace: workoutPlace ?? this.workoutPlace,
@@ -45,9 +37,6 @@ class GymQuestionnaireDataEntity extends Equatable {
       weeklyTrainings: weeklyTrainings ?? this.weeklyTrainings,
       cardioType: cardioType ?? this.cardioType,
       cardioFrequency: cardioFrequency ?? this.cardioFrequency,
-      preferredExercises: preferredExercises ?? this.preferredExercises,
-      dislikedExercises: dislikedExercises ?? this.dislikedExercises,
-      injuries: injuries ?? this.injuries,
     );
   }
 
@@ -64,11 +53,7 @@ class GymQuestionnaireDataEntity extends Equatable {
       weeklyTrainings: map['weekly_trainings'] as int,
       cardioType: cardioTypeFromString(map['cardio_type']) ?? CardioType.none,
       cardioFrequency: map['cardio_frequency'] as int,
-      preferredExercises:
-          List<String>.from(map['preferred_exercises'] as List? ?? []), // NUEVO
-      dislikedExercises:
-          List<String>.from(map['disliked_exercises'] as List? ?? []), // NUEVO
-      injuries: List<String>.from(map['injuries'] as List? ?? []), // NUEVO
+      // preferredExercises, dislikedExercises, injuries YA NO SE LEEN AQUÍ
     );
   }
 
@@ -81,12 +66,20 @@ class GymQuestionnaireDataEntity extends Equatable {
       'weekly_trainings': weeklyTrainings,
       'cardio_type': cardioType.toApiString(),
       'cardio_frequency': cardioFrequency,
-      'preferred_exercises': preferredExercises, // NUEVO
-      'disliked_exercises': dislikedExercises, // NUEVO
-      'injuries': injuries, // NUEVO
+      // preferred_exercises, disliked_exercises, injuries YA NO SE ESCRIBEN AQUÍ
     };
   }
 
+  factory GymQuestionnaireDataEntity.empty() {
+    return const GymQuestionnaireDataEntity(
+      workoutPlace: WorkoutPlace.home, // Valor por defecto
+      exerciseFrequency: 0, // Valor por defecto
+      muscleGroupFocus: [], // Lista vacía por defecto
+      weeklyTrainings: 0, // Valor por defecto
+      cardioType: CardioType.none, // Valor por defecto
+      cardioFrequency: 0, // Valor por defecto
+    );
+  }
   @override
   List<Object?> get props => [
         workoutPlace,
@@ -95,8 +88,5 @@ class GymQuestionnaireDataEntity extends Equatable {
         weeklyTrainings,
         cardioType,
         cardioFrequency,
-        preferredExercises, // NUEVO
-        dislikedExercises, // NUEVO
-        injuries, // NUEVO
       ];
 }

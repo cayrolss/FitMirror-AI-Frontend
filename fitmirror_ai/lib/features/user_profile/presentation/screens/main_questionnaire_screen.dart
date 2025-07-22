@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fitmirror_ai/features/user_profile/presentation/providers/main_questionnaire_controller.dart';
 import 'package:fitmirror_ai/core/enums.dart'; // Para los Enums
-import 'package:fitmirror_ai/features/user_profile/domain/entities/main_questionnaire_data_entity.dart'; // Necesario para el tipo
-import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart'; // Para obtener el username inicial
-import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_profile_providers.dart'; // Para el provider del perfil completo
+import 'package:fitmirror_ai/features/user_profile/domain/entities/main_questionnaire_data_entity.dart';
+import 'package:fitmirror_ai/features/user_profile/domain/entities/complete_user_profile_entity.dart';
+import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_profile_providers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainQuestionnaireScreen extends ConsumerStatefulWidget {
   const MainQuestionnaireScreen({super.key});
@@ -27,28 +28,36 @@ class _MainQuestionnaireScreenState
       TextEditingController();
   final TextEditingController _goalWeightController = TextEditingController();
 
+  Gender? _selectedGender;
+  ActivityLevel? _selectedActivityLevel;
+  WeightChangeGoal? _selectedWeightChangeGoal;
+  WeightChangeSpeed? _selectedWeightChangeSpeed;
+
   @override
   void initState() {
     super.initState();
-    // Cargar datos iniciales si existen (ej. al volver al cuestionario)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final currentProfile = ref
-          .read(completeUserProfileStreamProvider)
-          .value; // Obtener el perfil completo
-      if (currentProfile != null) {
-        _nameController.text = currentProfile.username ?? '';
-        final mainData = currentProfile.mainQuestionnaire;
-        if (mainData.age != 0) _ageController.text = mainData.age.toString();
-        if (mainData.heightCm != 0)
-          _heightController.text = mainData.heightCm.toString();
-        if (mainData.weightKg != 0.0)
-          _currentWeightController.text = mainData.weightKg.toString();
-        if (mainData.goalWeightKg != null && mainData.goalWeightKg != 0.0)
-          _goalWeightController.text = mainData.goalWeightKg.toString();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final currentProfile = ref
+            .read(completeUserProfileStreamProvider(user.uid)) // Usa user.uid
+            .value;
+        if (currentProfile != null) {
+          _nameController.text = currentProfile.username ?? '';
+          final mainData = currentProfile.mainQuestionnaire;
+          if (mainData.age != 0) _ageController.text = mainData.age.toString();
+          if (mainData.heightCm != 0)
+            _heightController.text = mainData.heightCm.toString();
+          if (mainData.weightKg != 0.0)
+            _currentWeightController.text = mainData.weightKg.toString();
+          if (mainData.goalWeightKg != null && mainData.goalWeightKg != 0.0)
+            _goalWeightController.text = mainData.goalWeightKg.toString();
 
-        // Si ya hay datos, el PageView podría ir a la última página completada
-        // o determinar el _currentPage basado en los datos existentes.
-        // Por simplicidad, empezaremos siempre desde la primera página por ahora.
+          _selectedGender = mainData.gender;
+          _selectedActivityLevel = mainData.activityLevel;
+          _selectedWeightChangeGoal = mainData.weightChangeGoal;
+          _selectedWeightChangeSpeed = mainData.weightChangeSpeed;
+        }
       }
     });
   }
@@ -65,8 +74,7 @@ class _MainQuestionnaireScreenState
   }
 
   void _nextPage() {
-    if (_currentPage < 4) {
-      // Asumimos 5 páginas (0-4)
+    if (_currentPage < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
@@ -75,7 +83,6 @@ class _MainQuestionnaireScreenState
         _currentPage++;
       });
     } else {
-      // Última página, lógica para finalizar o navegar al dashboard
       _handleFinishQuestionnaire();
     }
   }
@@ -92,896 +99,419 @@ class _MainQuestionnaireScreenState
     }
   }
 
-  Future<void> _handleFinishQuestionnaire() async {
-    // Al finalizar el último paso, el controlador ya debería tener los datos actualizados.
-    // Llamamos a save para asegurarnos de que todo está persistido.
-    final controller = ref.read(mainQuestionnaireControllerProvider.notifier);
-    try {
-      await controller.saveMainQuestionnaireData();
-      // Aquí puedes navegar a la siguiente sección del onboarding
-      // o directamente al dashboard si es el final de todo el onboarding.
-      // Por ejemplo: Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => DashboardScreen()));
-      print('Main Questionnaire completed and saved!');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cuestionario Principal Completado!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al guardar: $e')),
-      );
+  void _handleFinishQuestionnaire() async {
+    final mainQuestionnaireController =
+        ref.read(mainQuestionnaireControllerProvider.notifier);
+    final userProfileNotifier =
+        ref.read(userProfileControllerProvider.notifier);
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      print(
+          'Error: Usuario no logueado al finalizar el cuestionario principal.');
+      return;
+    }
+
+    final mainData = MainQuestionnaireDataEntity(
+      age: int.tryParse(_ageController.text) ?? 0,
+      gender: _selectedGender ?? Gender.male,
+      heightCm: int.tryParse(_heightController.text) ?? 0,
+      weightKg: double.tryParse(_currentWeightController.text) ?? 0.0,
+      activityLevel: _selectedActivityLevel ?? ActivityLevel.sedentary,
+      weightChangeGoal: _selectedWeightChangeGoal ?? WeightChangeGoal.maintain,
+      goalWeightKg: double.tryParse(_goalWeightController.text),
+      weightChangeSpeed: _selectedWeightChangeSpeed ?? WeightChangeSpeed.normal,
+    );
+
+    await mainQuestionnaireController.saveMainQuestionnaireData(
+        user.uid, mainData);
+
+    await userProfileNotifier.updateQuestionnaireStep(user.uid, 'gym');
+
+    if (context.mounted) {
+      context.go('/gym-questionnaire');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Escucha los cambios en el MainQuestionnaireDataEntity
-    final mainQuestionnaireData =
-        ref.watch(mainQuestionnaireControllerProvider);
+    final user = FirebaseAuth.instance.currentUser;
+    // Pasa el uid al provider, si user es null, pasa un string vacío para evitar null
+    final AsyncValue<CompleteUserProfileEntity?> userProfileAsync =
+        ref.watch(completeUserProfileStreamProvider(user?.uid ?? ''));
+
+    String displayedUsername = '';
+    userProfileAsync.whenOrNull(
+      data: (profile) {
+        if (profile != null) {
+          _nameController.text = profile.username ?? '';
+          displayedUsername = profile.username ?? '';
+        }
+      },
+      loading: () => displayedUsername = 'Cargando nombre...',
+      error: (e, st) => displayedUsername = 'Error cargando nombre',
+    );
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Cuestionario Principal'),
         leading: _currentPage > 0
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: _previousPage,
               )
             : null,
-        title: const Text('Cuestionario Principal'),
-        actions: [
-          // Barra de progreso simple
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Center(
-              child: Text('${_currentPage + 1}/5'),
-            ),
-          ),
-        ],
       ),
-      body: PageView(
-        controller: _pageController,
-        physics:
-            const NeverScrollableScrollPhysics(), // Deshabilita el deslizamiento manual
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index;
-          });
-        },
-        children: [
-          // Página 1: Nombre de Usuario
-          _NameQuestionPage(
-            nameController: _nameController,
-            onNext: () async {
-              if (_nameController.text.isNotEmpty) {
-                await ref
-                    .read(mainQuestionnaireControllerProvider.notifier)
-                    .updateUsername(_nameController.text);
-                _nextPage();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Por favor, ingresa tu nombre.')),
-                );
-              }
-            },
-          ),
-          // Página 2: ¿Cuál es tu objetivo?
-          _GoalQuestionPage(
-            currentGoal: mainQuestionnaireData.goal,
-            onSelect: (goal) {
-              ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('goal', goal);
-              _nextPage();
-            },
-          ),
-          // Página 3: ¿Cuál es tu género?
-          _GenderQuestionPage(
-            currentGender: mainQuestionnaireData.gender,
-            onSelect: (gender) {
-              ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('gender', gender);
-              _nextPage();
-            },
-          ),
-          // Página 4: Edad y Altura
-          _AgeHeightQuestionPage(
-            ageController: _ageController,
-            heightController: _heightController,
-            onNext: () {
-              final age = int.tryParse(_ageController.text);
-              final height = int.tryParse(_heightController.text);
-              if (age != null &&
-                  age >= 13 &&
-                  age <= 100 &&
-                  height != null &&
-                  height >= 100 &&
-                  height <= 250) {
-                ref
-                    .read(mainQuestionnaireControllerProvider.notifier)
-                    .updateField('age', age);
-                ref
-                    .read(mainQuestionnaireControllerProvider.notifier)
-                    .updateField('heightCm', height);
-                _nextPage();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text(
-                          'Por favor, ingresa una edad válida (13-100) y altura (100-250 cm).')),
-                );
-              }
-            },
-          ),
-          // Página 5: Peso Actual, Peso Objetivo y Velocidad
-          _WeightGoalSpeedQuestionPage(
-            currentWeightController: _currentWeightController,
-            goalWeightController: _goalWeightController,
-            currentWeightChangeSpeed: mainQuestionnaireData.weightChangeSpeed,
-            onNext: () {
-              final currentWeight =
-                  double.tryParse(_currentWeightController.text);
-              final goalWeight = double.tryParse(_goalWeightController.text);
-
-              if (currentWeight != null &&
-                  currentWeight >= 30 &&
-                  currentWeight <= 300 &&
-                  (goalWeight == null ||
-                      (goalWeight >= 30 && goalWeight <= 300))) {
-                ref
-                    .read(mainQuestionnaireControllerProvider.notifier)
-                    .updateField('weightKg', currentWeight);
-                ref
-                    .read(mainQuestionnaireControllerProvider.notifier)
-                    .updateField('goalWeightKg', goalWeight);
-                // weightChangeSpeed ya debería estar actualizado por el selector de la UI
-                _nextPage(); // Esto llamará a _handleFinishQuestionnaire
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text(
-                          'Por favor, ingresa un peso actual válido (30-300 kg) y un peso objetivo válido si aplica.')),
-                );
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// --- WIDGETS DE PÁGINAS INDIVIDUALES ---
-
-class _NameQuestionPage extends ConsumerWidget {
-  final TextEditingController nameController;
-  final VoidCallback onNext;
-
-  const _NameQuestionPage({required this.nameController, required this.onNext});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.waving_hand_rounded,
-              size: 80, color: Colors.blueAccent),
-          const SizedBox(height: 24),
-          const Text(
-            'Hi! What\'s your name?',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              hintText: 'Write your name here',
-              prefixIcon: const Icon(Icons.edit),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              filled: true,
-              fillColor: Colors.grey[200],
-            ),
-            onSubmitted: (_) => onNext(), // Permite avanzar al presionar enter
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: onNext,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Next'),
-                Icon(Icons.arrow_forward_ios_rounded, size: 16),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _GoalQuestionPage extends StatelessWidget {
-  final Goal currentGoal;
-  final ValueChanged<Goal> onSelect;
-
-  const _GoalQuestionPage({required this.currentGoal, required this.onSelect});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.flag_rounded, size: 80, color: Colors.blueAccent),
-          const SizedBox(height: 24),
-          const Text(
-            'What is your goal?',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          _GoalOptionCard(
-            icon: Icons.fitness_center_rounded,
-            title: 'Get fitter',
-            subtitle: 'Tone up & feel healthy',
-            isSelected: currentGoal == Goal.improveFitness,
-            onTap: () => onSelect(Goal.improveFitness),
-          ),
-          const SizedBox(height: 16),
-          _GoalOptionCard(
-            icon: Icons.arrow_upward_rounded,
-            title: 'Build muscle',
-            subtitle: 'Gain size and strength',
-            isSelected: currentGoal == Goal.gainMuscle,
-            onTap: () => onSelect(Goal.gainMuscle),
-          ),
-          const SizedBox(height: 16),
-          _GoalOptionCard(
-            icon: Icons.arrow_downward_rounded,
-            title: 'Lose weight',
-            subtitle: 'Reduce body fat',
-            isSelected: currentGoal == Goal.loseWeight,
-            onTap: () => onSelect(Goal.loseWeight),
-          ),
-          const SizedBox(height: 16),
-          _GoalOptionCard(
-            icon: Icons.bar_chart_rounded,
-            title: 'Maintain physique',
-            subtitle: 'Optimize your performance',
-            isSelected: currentGoal == Goal.maintainWeight,
-            onTap: () => onSelect(Goal.maintainWeight),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _GoalOptionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _GoalOptionCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: isSelected ? 4 : 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: isSelected
-            ? const BorderSide(color: Colors.blueAccent, width: 2)
-            : BorderSide.none,
-      ),
-      color: isSelected ? Colors.blueAccent.withOpacity(0.1) : Colors.white,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Icon(icon,
-                  size: 36,
-                  color: isSelected ? Colors.blueAccent : Colors.grey[700]),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.blueAccent : Colors.black,
-                      ),
-                    ),
-                    Text(
-                      subtitle,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GenderQuestionPage extends StatelessWidget {
-  final Gender currentGender;
-  final ValueChanged<Gender> onSelect;
-
-  const _GenderQuestionPage(
-      {required this.currentGender, required this.onSelect});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.person_rounded, size: 80, color: Colors.blueAccent),
-          const SizedBox(height: 24),
-          const Text(
-            'What is your gender?',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          _GenderOptionCard(
-            icon: Icons.male_rounded,
-            title: 'Male',
-            subtitle: 'Typically higher calorie needs',
-            isSelected: currentGender == Gender.male,
-            onTap: () => onSelect(Gender.male),
-          ),
-          const SizedBox(height: 16),
-          _GenderOptionCard(
-            icon: Icons.female_rounded,
-            title: 'Female',
-            subtitle: 'Tailored hormonal balance',
-            isSelected: currentGender == Gender.female,
-            onTap: () => onSelect(Gender.female),
-          ),
-          const SizedBox(height: 16),
-          _GenderOptionCard(
-            icon: Icons.transgender_rounded,
-            title: 'Other',
-            subtitle: 'We\'ll personalize it for you',
-            isSelected: currentGender == Gender.other,
-            onTap: () => onSelect(Gender.other),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _GenderOptionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _GenderOptionCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: isSelected ? 4 : 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: isSelected
-            ? const BorderSide(color: Colors.blueAccent, width: 2)
-            : BorderSide.none,
-      ),
-      color: isSelected ? Colors.blueAccent.withOpacity(0.1) : Colors.white,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Icon(icon,
-                  size: 36,
-                  color: isSelected ? Colors.blueAccent : Colors.grey[700]),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.blueAccent : Colors.black,
-                      ),
-                    ),
-                    Text(
-                      subtitle,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _AgeHeightQuestionPage extends ConsumerWidget {
-  final TextEditingController ageController;
-  final TextEditingController heightController;
-  final VoidCallback onNext;
-
-  const _AgeHeightQuestionPage({
-    required this.ageController,
-    required this.heightController,
-    required this.onNext,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mainQuestionnaireData =
-        ref.watch(mainQuestionnaireControllerProvider);
-
-    // Inicializar controladores si los datos ya existen en el estado
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mainQuestionnaireData.age != 0 && ageController.text.isEmpty) {
-        ageController.text = mainQuestionnaireData.age.toString();
-      }
-      if (mainQuestionnaireData.heightCm != 0 &&
-          heightController.text.isEmpty) {
-        heightController.text = mainQuestionnaireData.heightCm.toString();
-      }
-    });
-
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.person_outline, size: 80, color: Colors.blueAccent),
-          const SizedBox(height: 24),
-          const Text(
-            'We need a few details about you',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          _DetailInputCard(
-            icon: Icons.calendar_today_rounded,
-            title: 'Age',
-            value: mainQuestionnaireData.age == 0
-                ? ''
-                : '${mainQuestionnaireData.age} years',
-            onTap: () => _showNumberPicker(
-              context,
-              ageController,
-              'Age',
-              13,
-              100,
-              (value) => ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('age', value),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _DetailInputCard(
-            icon: Icons.height_rounded,
-            title: 'Height',
-            value: mainQuestionnaireData.heightCm == 0
-                ? ''
-                : '${mainQuestionnaireData.heightCm} cm',
-            onTap: () => _showNumberPicker(
-              context,
-              heightController,
-              'Height',
-              100,
-              250,
-              (value) => ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('heightCm', value),
-            ),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: onNext,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Next'),
-                Icon(Icons.arrow_forward_ios_rounded, size: 16),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Helper para mostrar un number picker (ej. para Edad/Altura)
-  void _showNumberPicker(BuildContext context, TextEditingController controller,
-      String title, int min, int max, ValueChanged<int> onValueSet) {
-    int? selectedValue = int.tryParse(controller.text.split(' ')[0]) ??
-        min; // Intenta parsear el valor actual
-
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 250,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-              Expanded(
-                child: Center(
-                  child: DropdownButton<int>(
-                    value: selectedValue,
-                    items: List.generate(max - min + 1, (index) => min + index)
-                        .map<DropdownMenuItem<int>>((int value) {
-                      return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text('$value'),
-                      );
-                    }).toList(),
-                    onChanged: (int? newValue) {
-                      if (newValue != null) {
-                        selectedValue = newValue;
-                        controller.text =
-                            '$newValue'; // Actualiza el controlador
-                        onValueSet(
-                            newValue); // Envía el valor al controlador de Riverpod
-                        Navigator.pop(context); // Cierra el modal
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _DetailInputCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String value;
-  final VoidCallback onTap;
-
-  const _DetailInputCard({
-    required this.icon,
-    required this.title,
-    required this.value,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: Colors.grey[100],
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Icon(icon, size: 36, color: Colors.blueAccent),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      value.isNotEmpty ? value : 'Tap to select',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios_rounded,
-                  size: 16, color: Colors.grey),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _WeightGoalSpeedQuestionPage extends ConsumerWidget {
-  final TextEditingController currentWeightController;
-  final TextEditingController goalWeightController;
-  final WeightChangeSpeed? currentWeightChangeSpeed; // Ahora puede ser nulo
-
-  final VoidCallback onNext;
-
-  const _WeightGoalSpeedQuestionPage({
-    required this.currentWeightController,
-    required this.goalWeightController,
-    this.currentWeightChangeSpeed,
-    required this.onNext,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final mainQuestionnaireData =
-        ref.watch(mainQuestionnaireControllerProvider);
-
-    // Inicializar controladores si los datos ya existen en el estado
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mainQuestionnaireData.weightKg != 0.0 &&
-          currentWeightController.text.isEmpty) {
-        currentWeightController.text =
-            mainQuestionnaireData.weightKg.toString();
-      }
-      if (mainQuestionnaireData.goalWeightKg != null &&
-          mainQuestionnaireData.goalWeightKg != 0.0 &&
-          goalWeightController.text.isEmpty) {
-        goalWeightController.text =
-            mainQuestionnaireData.goalWeightKg.toString();
-      }
-    });
-
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.fitness_center_rounded,
-              size: 80, color: Colors.blueAccent),
-          const SizedBox(height: 24),
-          const Text(
-            'Customize your goal',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 48),
-          _DetailInputCard(
-            icon: Icons.scale_rounded,
-            title: 'Current Weight',
-            value: mainQuestionnaireData.weightKg == 0.0
-                ? ''
-                : '${mainQuestionnaireData.weightKg} kg',
-            onTap: () => _showDecimalPicker(
-              context,
-              currentWeightController,
-              'Current Weight (kg)',
-              30.0,
-              300.0,
-              (value) => ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('weightKg', value),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _DetailInputCard(
-            icon: Icons.flag_circle_rounded,
-            title: 'Goal Weight',
-            value: mainQuestionnaireData.goalWeightKg == null ||
-                    mainQuestionnaireData.goalWeightKg == 0.0
-                ? ''
-                : '${mainQuestionnaireData.goalWeightKg} kg',
-            onTap: () => _showDecimalPicker(
-              context,
-              goalWeightController,
-              'Goal Weight (kg)',
-              30.0,
-              300.0,
-              (value) => ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('goalWeightKg', value),
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SpeedOptionCard(
-            currentSpeed: currentWeightChangeSpeed,
-            onSelect: (speed) {
-              ref
-                  .read(mainQuestionnaireControllerProvider.notifier)
-                  .updateField('weightChangeSpeed', speed);
-            },
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: onNext,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Create your plan'),
-                Icon(Icons.arrow_forward_ios_rounded, size: 16),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Helper para mostrar un number picker para valores decimales (ej. para Pesos)
-  void _showDecimalPicker(
-      BuildContext context,
-      TextEditingController controller,
-      String title,
-      double min,
-      double max,
-      ValueChanged<double> onValueSet) {
-    double? selectedValue = double.tryParse(controller.text) ?? min;
-
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 250,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-              Expanded(
-                child: Center(
-                  child: DropdownButton<double>(
-                    value: selectedValue,
-                    items: List.generate(((max - min) * 10).toInt() + 1,
-                            (index) => min + (index / 10))
-                        .map<DropdownMenuItem<double>>((double value) {
-                      return DropdownMenuItem<double>(
-                        value: value,
-                        child: Text(
-                            value.toStringAsFixed(1)), // Mostrar con un decimal
-                      );
-                    }).toList(),
-                    onChanged: (double? newValue) {
-                      if (newValue != null) {
-                        selectedValue = newValue;
-                        controller.text = newValue.toStringAsFixed(1);
-                        onValueSet(newValue);
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _SpeedOptionCard extends StatelessWidget {
-  final WeightChangeSpeed? currentSpeed;
-  final ValueChanged<WeightChangeSpeed> onSelect;
-
-  const _SpeedOptionCard({
-    required this.currentSpeed,
-    required this.onSelect,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: Colors.grey[100],
-      child: Padding(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Speed',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                children: [
+                  _buildPersonalInfoPage(displayedUsername),
+                  _buildActivityAndGoalPage(),
+                  _buildWeightChangeSpeedPage(),
+                  _buildSummaryPage(),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: WeightChangeSpeed.values.map((speed) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: ChoiceChip(
-                      label: Text(speed
-                          .toShortString()
-                          .capitalize()), // Necesitarás la extensión .capitalize()
-                      selected: currentSpeed == speed,
-                      onSelected: (selected) {
-                        if (selected) {
-                          onSelect(speed);
-                        }
-                      },
-                      selectedColor: Colors.blueAccent,
-                      labelStyle: TextStyle(
-                        color:
-                            currentSpeed == speed ? Colors.white : Colors.black,
-                      ),
-                    ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (_currentPage < 3)
+                  ElevatedButton(
+                    onPressed: _nextPage,
+                    child: const Text('Siguiente'),
                   ),
-                );
-              }).toList(),
+                if (_currentPage == 3)
+                  ElevatedButton(
+                    onPressed: _handleFinishQuestionnaire,
+                    child: const Text('Finalizar'),
+                  ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildPersonalInfoPage(String username) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('¡Hola! Cuéntanos un poco sobre ti:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _nameController,
+            decoration: const InputDecoration(labelText: 'Tu nombre'),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _ageController,
+            decoration: const InputDecoration(labelText: 'Edad'),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _heightController,
+            decoration: const InputDecoration(labelText: 'Altura (cm)'),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _currentWeightController,
+            decoration: const InputDecoration(labelText: 'Peso actual (kg)'),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 20),
+          GenderSelectionChips(
+            selectedGender: _selectedGender,
+            onSelect: (gender) {
+              setState(() {
+                _selectedGender = gender;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityAndGoalPage() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('¿Cuál es tu nivel de actividad y tu objetivo?',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          ActivityLevelChips(
+            selectedActivityLevel: _selectedActivityLevel,
+            onSelect: (level) {
+              setState(() {
+                _selectedActivityLevel = level;
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          WeightChangeGoalChips(
+            selectedGoal: _selectedWeightChangeGoal,
+            onSelect: (goal) {
+              setState(() {
+                _selectedWeightChangeGoal = goal;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeightChangeSpeedPage() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Detalles sobre tu objetivo de peso:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          WeightChangeSpeedChips(
+            currentSpeed: _selectedWeightChangeSpeed,
+            onSelect: (speed) {
+              setState(() {
+                _selectedWeightChangeSpeed = speed;
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          if (_selectedWeightChangeGoal != WeightChangeGoal.maintain)
+            TextField(
+              controller: _goalWeightController,
+              decoration:
+                  const InputDecoration(labelText: 'Peso objetivo (kg)'),
+              keyboardType: TextInputType.number,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryPage() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('¡Casi listo! Revisa tus datos:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          Text('Nombre: ${_nameController.text}'),
+          Text('Edad: ${_ageController.text} años'),
+          Text('Altura: ${_heightController.text} cm'),
+          Text('Peso actual: ${_currentWeightController.text} kg'),
+          Text(
+              'Género: ${_selectedGender?.toShortString().capitalize() ?? 'No especificado'}'),
+          Text(
+              'Nivel de Actividad: ${_selectedActivityLevel?.toShortString().capitalize() ?? 'No especificado'}'),
+          Text(
+              'Objetivo de Peso: ${_selectedWeightChangeGoal?.toShortString().capitalize() ?? 'No especificado'}'),
+          if (_selectedWeightChangeGoal != WeightChangeGoal.maintain)
+            Text('Peso Objetivo: ${_goalWeightController.text} kg'),
+          Text(
+              'Velocidad de cambio: ${_selectedWeightChangeSpeed?.toShortString().capitalize() ?? 'No especificado'}'),
+          const SizedBox(height: 20),
+          const Text('Pulsa "Finalizar" para guardar y continuar.',
+              style: TextStyle(fontStyle: FontStyle.italic)),
+        ],
+      ),
+    );
+  }
 }
 
-// Extensión para obtener strings legibles de los enums
+class GenderSelectionChips extends StatelessWidget {
+  final Gender? selectedGender;
+  final Function(Gender) onSelect;
+
+  const GenderSelectionChips({
+    super.key,
+    required this.selectedGender,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Género:', style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8.0,
+          children: Gender.values.map((gender) {
+            return ChoiceChip(
+              label: Text(gender.toShortString().capitalize()),
+              selected: selectedGender == gender,
+              onSelected: (selected) {
+                if (selected) {
+                  onSelect(gender);
+                }
+              },
+              selectedColor: Colors.blueAccent,
+              labelStyle: TextStyle(
+                color: selectedGender == gender ? Colors.white : Colors.black,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class ActivityLevelChips extends StatelessWidget {
+  final ActivityLevel? selectedActivityLevel;
+  final Function(ActivityLevel) onSelect;
+
+  const ActivityLevelChips({
+    super.key,
+    required this.selectedActivityLevel,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Nivel de Actividad:',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: ActivityLevel.values.map((level) {
+            return ChoiceChip(
+              label: Text(level.toShortString().capitalize()),
+              selected: selectedActivityLevel == level,
+              onSelected: (selected) {
+                if (selected) {
+                  onSelect(level);
+                }
+              },
+              selectedColor: Colors.blueAccent,
+              labelStyle: TextStyle(
+                color: selectedActivityLevel == level
+                    ? Colors.white
+                    : Colors.black,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class WeightChangeGoalChips extends StatelessWidget {
+  final WeightChangeGoal? selectedGoal;
+  final Function(WeightChangeGoal) onSelect;
+
+  const WeightChangeGoalChips({
+    super.key,
+    required this.selectedGoal,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Objetivo de Cambio de Peso:',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: WeightChangeGoal.values.map((goal) {
+            return ChoiceChip(
+              label: Text(goal.toShortString().capitalize()),
+              selected: selectedGoal == goal,
+              onSelected: (selected) {
+                if (selected) {
+                  onSelect(goal);
+                }
+              },
+              selectedColor: Colors.blueAccent,
+              labelStyle: TextStyle(
+                color: selectedGoal == goal ? Colors.white : Colors.black,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+class WeightChangeSpeedChips extends StatelessWidget {
+  final WeightChangeSpeed? currentSpeed;
+  final Function(WeightChangeSpeed) onSelect;
+
+  const WeightChangeSpeedChips({
+    super.key,
+    required this.currentSpeed,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Velocidad de Cambio de Peso:',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: WeightChangeSpeed.values.map((speed) {
+            return ChoiceChip(
+              label: Text(speed.toShortString().capitalize()),
+              selected: currentSpeed == speed,
+              onSelected: (selected) {
+                if (selected) {
+                  onSelect(speed);
+                }
+              },
+              selectedColor: Colors.blueAccent,
+              labelStyle: TextStyle(
+                color: currentSpeed == speed ? Colors.white : Colors.black,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
 extension EnumExtension on Enum {
   String toShortString() {
     return toString().split('.').last;
   }
 }
 
-// Extensión para capitalizar la primera letra (necesaria para la UI de los chips)
 extension StringCasingExtension on String {
   String capitalize() {
     return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';

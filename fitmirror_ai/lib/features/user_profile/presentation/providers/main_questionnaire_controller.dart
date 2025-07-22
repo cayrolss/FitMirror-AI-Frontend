@@ -7,14 +7,13 @@ import 'package:fitmirror_ai/features/user_profile/domain/repositories/user_prof
 import 'package:fitmirror_ai/features/auth/domain/repositories/auth_repository.dart'; // USERID
 import 'package:fitmirror_ai/core/enums.dart'; // ENUMS
 
-import 'package:fitmirror_ai/features/auth/presentation/providers/auth_providers.dart'; // ¡Añade esta línea!
-import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_profile_providers.dart'; // USERPROFILEREPOSITORY
-import 'package:fitmirror_ai/features/user_profile/domain/entities/gym_questionnaire_data_entity.dart'; // GYMQUESTIONNAIRE
-import 'package:fitmirror_ai/features/user_profile/domain/entities/nutrition_questionnaire_data_entity.dart'; // NUTRIQUESTIONNAIRE
+import 'package:fitmirror_ai/features/auth/presentation/providers/auth_providers.dart';
+import 'package:fitmirror_ai/features/user_profile/presentation/providers/user_profile_providers.dart';
+import 'package:fitmirror_ai/features/user_profile/domain/entities/gym_questionnaire_data_entity.dart';
+import 'package:fitmirror_ai/features/user_profile/domain/entities/nutrition_questionnaire_data_entity.dart';
 
 part 'main_questionnaire_controller.g.dart';
 
-// ... el resto de tu código MainQuestionnaireController
 @riverpod
 class MainQuestionnaireController extends _$MainQuestionnaireController {
   MainQuestionnaireController();
@@ -32,8 +31,9 @@ class MainQuestionnaireController extends _$MainQuestionnaireController {
       age: 0, // Se actualizará
       heightCm: 0, // Se actualizará
       weightKg: 0.0, // Se actualizará
-      goalWeightKg: 0.0, // Se actualizará
-      weightChangeSpeed: WeightChangeSpeed.normal,
+      goalWeightKg: null, // Puede ser nulo por defecto
+      weightChangeSpeed: null, // Puede ser nulo por defecto
+      activityLevel: null, // Añadido
     );
   }
 
@@ -51,11 +51,15 @@ class MainQuestionnaireController extends _$MainQuestionnaireController {
       weightChangeSpeed: fieldName == 'weightChangeSpeed'
           ? value as WeightChangeSpeed?
           : state.weightChangeSpeed,
+      activityLevel: fieldName == 'activityLevel' // Añadido
+          ? value as ActivityLevel?
+          : state.activityLevel,
     );
   }
 
-  // Método para guardar el MainQuestionnaireDataEntity en Firestore
-  Future<void> saveMainQuestionnaireData() async {
+  // ¡CORREGIDO AQUÍ! Ahora acepta MainQuestionnaireDataEntity como argumento
+  Future<void> saveMainQuestionnaireData(
+      MainQuestionnaireDataEntity data) async {
     final userId = _authRepository.currentUser?.uid;
     if (userId == null) {
       throw Exception('Usuario no autenticado para guardar el perfil.');
@@ -73,38 +77,27 @@ class MainQuestionnaireController extends _$MainQuestionnaireController {
           userId: userId,
           username:
               '', // El username debería obtenerse de otro lado o ser un campo de la primera pantalla
-          mainQuestionnaire: state,
-          gymQuestionnaire: const GymQuestionnaireDataEntity(
-            workoutPlace: WorkoutPlace.home,
-            exerciseFrequency: 0,
-            muscleGroupFocus: [],
-            weeklyTrainings: 0,
-            cardioType: CardioType.none,
-            cardioFrequency: 0,
-          ),
-          nutritionQuestionnaire: const NutritionQuestionnaireDataEntity(
-            dietaryType: DietaryType.standard,
-            dietFocus: DietFocus.balanced,
-            mealsPerDay: 0,
-            allergies: [],
-            likedFoods: [],
-            dislikedFoods: [],
-            dietaryRestrictions: [],
-          ),
+          mainQuestionnaire: data, // ¡Usa los datos pasados como argumento!
+          gymQuestionnaire:
+              GymQuestionnaireDataEntity.empty(), // Usa el empty factory
+          nutritionQuestionnaire:
+              NutritionQuestionnaireDataEntity.empty(), // Usa el empty factory
+          preferredExercises: const [],
+          dislikedExercises: const [],
+          injuries: const [],
+          preferredLanguage: 'es',
+          questionnaireStep: 'initial',
+          onboardingCompleted: false,
         );
       } else {
         // Actualizar solo el mainQuestionnaire del perfil existente
         currentProfile = currentProfile.copyWith(
-          mainQuestionnaire: state,
+          mainQuestionnaire: data, // ¡Usa los datos pasados como argumento!
         );
       }
 
       // Guardar el perfil completo actualizado en Firestore
       await _userProfileRepository.saveUserProfile(currentProfile);
-
-      // Opcional: Actualizar el paso del cuestionario en el perfil del usuario
-      // currentProfile = currentProfile.copyWith(questionnaireStep: 'main_completed');
-      // await _userProfileRepository.saveUserProfile(currentProfile);
 
       print('Main Questionnaire data saved successfully!');
     } catch (e) {

@@ -86,7 +86,7 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           weightChangeSpeed: WeightChangeSpeed.normal,
         );
 
-        // CORREGIDO: preferredExercises, dislikedExercises, injuries van aquí
+        // MODIFICADO: preferredExercises, dislikedExercises, injuries YA NO VAN AQUÍ
         final initialGymQuestionnaire = GymQuestionnaireDataEntity(
           workoutPlace: WorkoutPlace.home,
           exerciseFrequency: 0,
@@ -94,9 +94,6 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
           weeklyTrainings: 0,
           cardioType: CardioType.none,
           cardioFrequency: 0,
-          preferredExercises: const [], // Van aquí
-          dislikedExercises: const [], // Van aquí
-          injuries: const [], // Van aquí
         );
 
         final initialNutritionQuestionnaire = NutritionQuestionnaireDataEntity(
@@ -110,17 +107,19 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
         );
 
         // Después de un registro exitoso, guarda un perfil de usuario inicial en Firestore
-        // CORREGIDO: preferredLanguage, questionnaireStep, onboardingCompleted van en CompleteUserProfileEntity
+        // MODIFICADO: preferredExercises, dislikedExercises, injuries AHORA VAN AQUÍ
         final initialProfile = CompleteUserProfileEntity(
           userId: user.uid,
           username: username,
           mainQuestionnaire: initialMainQuestionnaire,
-          gymQuestionnaire:
-              initialGymQuestionnaire, // Pasar la instancia con los nuevos campos
+          gymQuestionnaire: initialGymQuestionnaire,
           nutritionQuestionnaire: initialNutritionQuestionnaire,
-          preferredLanguage: 'es', // Va aquí
-          questionnaireStep: 'initial', // Va aquí
-          onboardingCompleted: false, // Va aquí
+          preferredExercises: const [], // AHORA AQUÍ
+          dislikedExercises: const [], // AHORA AQUÍ
+          injuries: const [], // AHORA AQUÍ
+          preferredLanguage: 'es',
+          questionnaireStep: 'initial',
+          onboardingCompleted: false,
         );
         await _userProfileRepository.saveUserProfile(initialProfile);
       }

@@ -27,6 +27,15 @@ enum WeightChangeSpeed {
   fast,
 }
 
+enum ActivityLevel {
+  // ¡Enum ActivityLevel añadido/reconfirmado!
+  sedentary, // Poco o ningún ejercicio
+  lightlyActive, // Ejercicio ligero/deportes 1-3 días/semana
+  moderatelyActive, // Ejercicio moderado/deportes 3-5 días/semana
+  veryActive, // Ejercicio duro/deportes 6-7 días/semana
+  extraActive, // Ejercicio muy duro/trabajo físico
+}
+
 enum MuscleGroupFocus {
   upper,
   lower,
@@ -59,8 +68,21 @@ enum DietFocus {
 }
 
 // Extensiones útiles para convertir de/a String
+// toApiString() para enviar a la base de datos/API (Debe COINCIDIR con user_models.py)
 extension GenderExtension on Gender {
   String toApiString() {
+    switch (this) {
+      case Gender.male:
+        return "Masculino"; // Coincide con Python
+      case Gender.female:
+        return "Femenino"; // Coincide con Python
+      case Gender.other:
+        return "Otro"; // Coincide con Python
+    }
+  }
+
+  // toSpanishString() para mostrar en la interfaz de usuario
+  String toSpanishString() {
     switch (this) {
       case Gender.male:
         return "Masculino";
@@ -76,21 +98,49 @@ extension GoalExtension on Goal {
   String toApiString() {
     switch (this) {
       case Goal.loseWeight:
-        return "perder peso";
+        return "perder peso"; // Coincide con Python
       case Goal.gainMuscle:
-        return "ganar músculo";
+        return "ganar músculo"; // Coincide con Python
       case Goal.maintainWeight:
-        return "mantener peso";
+        return "mantener peso"; // Coincide con Python
       case Goal.improveFitness:
-        return "mejorar condición física";
+        return "mejorar condición física"; // Coincide con Python
       case Goal.generalHealth:
-        return "salud general";
+        return "salud general"; // Coincide con Python
+    }
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case Goal.loseWeight:
+        return "Perder peso";
+      case Goal.gainMuscle:
+        return "Ganar músculo";
+      case Goal.maintainWeight:
+        return "Mantener peso";
+      case Goal.improveFitness:
+        return "Mejorar condición física";
+      case Goal.generalHealth:
+        return "Salud general";
     }
   }
 }
 
 extension WorkoutPlaceExtension on WorkoutPlace {
   String toApiString() {
+    switch (this) {
+      case WorkoutPlace.home:
+        return "Casa"; // Coincide con Python
+      case WorkoutPlace.gym:
+        return "Gimnasio"; // Coincide con Python
+      case WorkoutPlace.outdoor:
+        return "Al aire libre"; // Coincide con Python
+      case WorkoutPlace.both:
+        return "Casa y gimnasio"; // Coincide con Python
+    }
+  }
+
+  String toSpanishString() {
     switch (this) {
       case WorkoutPlace.home:
         return "Casa";
@@ -106,35 +156,127 @@ extension WorkoutPlaceExtension on WorkoutPlace {
 
 extension WeightChangeSpeedExtension on WeightChangeSpeed {
   String toApiString() {
-    return name; // Uses the enum name directly for 'slow', 'normal', 'fast'
+    return name; // 'slow', 'normal', 'fast' (Coincide con Python)
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case WeightChangeSpeed.slow:
+        return "Lenta";
+      case WeightChangeSpeed.normal:
+        return "Normal";
+      case WeightChangeSpeed.fast:
+        return "Rápida";
+    }
+  }
+}
+
+extension ActivityLevelExtension on ActivityLevel {
+  // ¡Extensión añadida!
+  String toApiString() {
+    return name; // 'sedentary', 'lightlyActive', etc. (Coincide con Python)
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case ActivityLevel.sedentary:
+        return "Sedentario";
+      case ActivityLevel.lightlyActive:
+        return "Actividad ligera";
+      case ActivityLevel.moderatelyActive:
+        return "Actividad moderada";
+      case ActivityLevel.veryActive:
+        return "Muy activo";
+      case ActivityLevel.extraActive:
+        return "Extra activo";
+    }
   }
 }
 
 extension MuscleGroupFocusExtension on MuscleGroupFocus {
   String toApiString() {
-    return name; // Uses the enum name directly
+    return name; // 'upper', 'lower', etc. (Coincide con Python)
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case MuscleGroupFocus.upper:
+        return "Parte superior";
+      case MuscleGroupFocus.lower:
+        return "Parte inferior";
+      case MuscleGroupFocus.balanced:
+        return "Equilibrado";
+      case MuscleGroupFocus.core:
+        return "Core";
+      case MuscleGroupFocus.fullBody:
+        return "Cuerpo completo";
+    }
   }
 }
 
 extension CardioTypeExtension on CardioType {
   String toApiString() {
-    return name; // Uses the enum name directly
+    return name; // 'none', 'light', etc. (Coincide con Python)
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case CardioType.none:
+        return "Ninguno";
+      case CardioType.light:
+        return "Ligero";
+      case CardioType.moderate:
+        return "Moderado";
+      case CardioType.intense:
+        return "Intenso";
+    }
   }
 }
 
 extension DietaryTypeExtension on DietaryType {
   String toApiString() {
-    return name; // Uses the enum name directly
+    return name; // 'standard', 'pescatarian', etc. (Coincide con Python)
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case DietaryType.standard:
+        return "Estándar";
+      case DietaryType.pescatarian:
+        return "Pescetariana";
+      case DietaryType.vegetarian:
+        return "Vegetariana";
+      case DietaryType.vegan:
+        return "Vegana";
+    }
   }
 }
 
 extension DietFocusExtension on DietFocus {
   String toApiString() {
-    return name; // Uses the enum name directly
+    return name; // 'highProtein', 'balanced', etc. (Coincide con Python)
+  }
+
+  String toSpanishString() {
+    switch (this) {
+      case DietFocus.highProtein:
+        return "Alto en proteína";
+      case DietFocus.balanced:
+        return "Equilibrado";
+      case DietFocus.lowCarb:
+        return "Bajo en carbohidratos";
+      case DietFocus.lowFat:
+        return "Bajo en grasa";
+      case DietFocus.mediterranean:
+        return "Mediterránea";
+      case DietFocus.keto:
+        return "Keto";
+    }
   }
 }
 
 // Métodos para convertir de String (desde Firestore/API) a Enum
+// Deben poder parsear los strings que envía la API
 Gender? genderFromString(String? value) {
   if (value == null) return null;
   switch (value) {
@@ -187,6 +329,16 @@ WeightChangeSpeed? weightChangeSpeedFromString(String? value) {
   if (value == null) return null;
   try {
     return WeightChangeSpeed.values.firstWhere((e) => e.name == value);
+  } catch (e) {
+    return null;
+  }
+}
+
+ActivityLevel? activityLevelFromString(String? value) {
+  // ¡Función añadida!
+  if (value == null) return null;
+  try {
+    return ActivityLevel.values.firstWhere((e) => e.name == value);
   } catch (e) {
     return null;
   }

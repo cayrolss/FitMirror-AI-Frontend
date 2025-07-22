@@ -11,6 +11,7 @@ class MainQuestionnaireDataEntity extends Equatable {
   final double weightKg;
   final double? goalWeightKg;
   final WeightChangeSpeed? weightChangeSpeed;
+  final ActivityLevel? activityLevel; // ¡Campo añadido!
 
   const MainQuestionnaireDataEntity({
     required this.goal,
@@ -20,9 +21,10 @@ class MainQuestionnaireDataEntity extends Equatable {
     required this.weightKg,
     this.goalWeightKg,
     this.weightChangeSpeed,
+    this.activityLevel, // ¡Parámetro añadido al constructor!
   });
 
-  // NUEVO: Método copyWith para MainQuestionnaireDataEntity
+  // Método copyWith para MainQuestionnaireDataEntity
   MainQuestionnaireDataEntity copyWith({
     Goal? goal,
     Gender? gender,
@@ -31,6 +33,7 @@ class MainQuestionnaireDataEntity extends Equatable {
     double? weightKg,
     double? goalWeightKg,
     WeightChangeSpeed? weightChangeSpeed,
+    ActivityLevel? activityLevel, // ¡Añadido a copyWith!
   }) {
     return MainQuestionnaireDataEntity(
       goal: goal ?? this.goal,
@@ -40,21 +43,37 @@ class MainQuestionnaireDataEntity extends Equatable {
       weightKg: weightKg ?? this.weightKg,
       goalWeightKg: goalWeightKg ?? this.goalWeightKg,
       weightChangeSpeed: weightChangeSpeed ?? this.weightChangeSpeed,
+      activityLevel:
+          activityLevel ?? this.activityLevel, // ¡Añadido a copyWith!
+    );
+  }
+
+  // MÉTODO FACTORY empty() AJUSTADO
+  factory MainQuestionnaireDataEntity.empty() {
+    return const MainQuestionnaireDataEntity(
+      goal: Goal.maintainWeight, // Valor por defecto
+      gender: Gender.other, // Valor por defecto
+      age: 0, // Valor inicial
+      heightCm: 0, // Valor inicial
+      weightKg: 0.0, // Valor inicial
+      goalWeightKg: null, // Campo opcional
+      weightChangeSpeed: null, // Campo opcional
+      activityLevel: null, // ¡Valor por defecto añadido!
     );
   }
 
   factory MainQuestionnaireDataEntity.fromMap(Map<String, dynamic> map) {
     return MainQuestionnaireDataEntity(
-      goal: goalFromString(map['goal']) ??
-          Goal.maintainWeight, // Default si no se encuentra
-      gender: genderFromString(map['gender']) ??
-          Gender.other, // Default si no se encuentra
+      goal: goalFromString(map['goal']) ?? Goal.maintainWeight,
+      gender: genderFromString(map['gender']) ?? Gender.other,
       age: map['age'] as int,
       heightCm: map['height_cm'] as int,
       weightKg: (map['weight_kg'] as num).toDouble(),
       goalWeightKg: (map['goal_weight_kg'] as num?)?.toDouble(),
       weightChangeSpeed:
           weightChangeSpeedFromString(map['weight_change_speed']),
+      activityLevel:
+          activityLevelFromString(map['activity_level']), // ¡Añadido a fromMap!
     );
   }
 
@@ -67,6 +86,7 @@ class MainQuestionnaireDataEntity extends Equatable {
       'weight_kg': weightKg,
       'goal_weight_kg': goalWeightKg,
       'weight_change_speed': weightChangeSpeed?.toApiString(),
+      'activity_level': activityLevel?.toApiString(), // ¡Añadido a toMap!
     };
   }
 
@@ -79,5 +99,6 @@ class MainQuestionnaireDataEntity extends Equatable {
         weightKg,
         goalWeightKg,
         weightChangeSpeed,
+        activityLevel, // ¡Añadido a props!
       ];
 }
